@@ -21,4 +21,18 @@ namespace IPB2.WallletTransfer.Window.Dtos
         public decimal Balance { get; set; }
         public string Password { get; set; }
     }
+
+    public class WithdrawRequest
+    {
+        public WithdrawRequest(string mobileno, string password, decimal balance)
+        {
+            this.Mobileno = mobileno;
+            this.Balance = balance;
+            Password = password;
+        }
+
+        public string Mobileno { get; set; }
+        public decimal Balance { get; set; }
+        public string Password { get; set; }
+    }
 }

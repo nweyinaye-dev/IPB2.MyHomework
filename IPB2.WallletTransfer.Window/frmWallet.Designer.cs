@@ -358,12 +358,14 @@
             txtWithdrawAmount.Name = "txtWithdrawAmount";
             txtWithdrawAmount.Size = new Size(139, 23);
             txtWithdrawAmount.TabIndex = 5;
+            txtWithdrawAmount.TextAlign = HorizontalAlignment.Right;
             txtWithdrawAmount.KeyPress += txtWithdrawAmount_KeyPress;
             // 
             // txtWithdrawPassword
             // 
             txtWithdrawPassword.Location = new Point(190, 80);
             txtWithdrawPassword.Name = "txtWithdrawPassword";
+            txtWithdrawPassword.PasswordChar = '*';
             txtWithdrawPassword.Size = new Size(139, 23);
             txtWithdrawPassword.TabIndex = 4;
             // 
@@ -438,6 +440,7 @@
             btnDeposit.TabIndex = 6;
             btnDeposit.Text = "Deposit";
             btnDeposit.UseVisualStyleBackColor = true;
+            btnDeposit.Click += btnDeposit_Click_1;
             // 
             // txtDepositAmount
             // 
@@ -445,6 +448,7 @@
             txtDepositAmount.Name = "txtDepositAmount";
             txtDepositAmount.Size = new Size(148, 23);
             txtDepositAmount.TabIndex = 5;
+            txtDepositAmount.TextAlign = HorizontalAlignment.Right;
             // 
             // txtDepositPassword
             // 

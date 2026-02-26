@@ -8,7 +8,27 @@ using Response = IPB2.WallletTransfer.Window.Dtos.Response;
 namespace IPB2.WallletTransfer.Window
 {
     public class WalletService : WalletDAO
-    {     
+    {
+        public async Task<Response> CreateAccount(CreateAccountRequestDto req)
+        {
+
+            var exitAccount = await GetByMobileAsync(req.MobileNo);
+            if (exitAccount != null)
+                return new Response { isSuccess = false, Message = "Your mobileNo  already exits." };
+
+            var newAccount = new TblAccount
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = req.Name,
+                MobileNo = req.MobileNo,
+                Password = req.Password,
+                Balance = 0,
+                IsDelete = false,
+            };
+            await CreateAsync(newAccount);
+            return new Response { isSuccess = true, Message = "Transfer success." };
+        }
+
         public async Task<Response> Transfer(TransferRequest request)
         {
             var sender = await GetByMobileAsync(request.SenderMobileno);
@@ -67,22 +87,39 @@ namespace IPB2.WallletTransfer.Window
 
         }
         
-        public async  Task<Response> CreateAccount(CreateAccountRequestDto req){
+        public async Task<Response> Withdraw(WithdrawRequest req) {
+            var account = await GetByMobileAsync(req.Mobileno);
+            if (account == null)
+                return new Response { isSuccess = false, Message = "Account not found." };
 
-            var exitAccount = await GetByMobileAsync(req.MobileNo);
-            if (exitAccount != null)
-                return new Response { isSuccess = false, Message = "Your mobileNo  already exits." };
+            if (account.Password != req.Password)
+                return new Response { isSuccess = false, Message = "Invalid password." };
 
-            var newAccount = new TblAccount {
-                Id = Guid.NewGuid().ToString(),
-                Name = req.Name,
-                MobileNo = req.MobileNo,
-                Password = req.Password,
-                Balance = 0,
-                IsDelete = false,
-            };
-            await CreateAsync(newAccount);
-            return new Response { isSuccess = true, Message = "Transfer success." };
+            if (account.Balance < req.Balance)
+                return new Response { isSuccess = false, Message = "Insufficient balance." };
+
+            account.Balance -= req.Balance;
+            await UpdateAsync(account);
+
+            return new Response { isSuccess = true, Message = $"Withdraw successfully.Your current balance is {account.Balance}." };
+
         }
+
+        public async Task<Response> Deposit(WithdrawRequest req)
+        {
+            var account = await GetByMobileAsync(req.Mobileno);
+            if (account == null)
+                return new Response { isSuccess = false, Message = "Account not found." };
+
+            if (account.Password != req.Password)
+                return new Response { isSuccess = false, Message = "Invalid password." };
+
+            account.Balance += req.Balance;
+            await UpdateAsync(account);
+
+            return new Response { isSuccess = true, Message = $"Deposit successfully.Your current balance is {account.Balance}." };
+
+        }
+
     }
 }

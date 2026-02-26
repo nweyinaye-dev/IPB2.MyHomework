@@ -100,6 +100,16 @@ namespace IPB2.WallletTransfer
                 this.txtWithdrawAmount.Focus();
                 return false;
             }
+            if (!string.IsNullOrWhiteSpace(this.txtWithdrawAmount.Text.Trim()))
+            {
+                if (Convert.ToDecimal(this.txtWithdrawAmount.Text.Trim()) <= 0)
+                {
+                    msg = "Amount must be greater than 0.";
+                    this.txtWithdrawAmount.Focus();
+                    return false;
+                }
+
+            }
             return true;
         }
 
@@ -123,6 +133,16 @@ namespace IPB2.WallletTransfer
                 msg = "Amount is required.";
                 this.txtDepositAmount.Focus();
                 return false;
+            }
+            if (!string.IsNullOrWhiteSpace(this.txtWithdrawAmount.Text.Trim()))
+            {
+                if (Convert.ToDecimal(this.txtWithdrawAmount.Text.Trim()) <= 0)
+                {
+                    msg = "Amount must be greater than 0.";
+                    this.txtWithdrawAmount.Focus();
+                    return false;
+                }
+
             }
             return true;
         }
@@ -268,7 +288,7 @@ namespace IPB2.WallletTransfer
                 e.Handled = true;
             }
         }
-        private void btnWithdraw_Click(object sender, EventArgs e)
+        private async void btnWithdraw_Click(object sender, EventArgs e)
         {
             try
             {
@@ -277,16 +297,15 @@ namespace IPB2.WallletTransfer
                     MessageBox.Show(msg);
                     return;
                 }
-                //var req = new CreateAccountRequestDto(txtName.Text.Trim(), txtCreateMobileno.Text.Trim(),
-                //      txtCreateMobileno.Text.Trim(), txtConfirmPassword.Text.Trim());
+                var req = new WithdrawRequest(txtWithdrawMobileno.Text.Trim(), txtWithdrawPassword.Text.Trim(), Convert.ToDecimal(txtWithdrawAmount.Text.Trim()));
 
-                //var response = await walletService.CreateAccount(req);
+                var response = await walletService.Withdraw(req);
 
-                //if (response?.isSuccess == true)
-                //{
-                //    ClearCreateData();
-                //}
-                //MessageBox.Show(response?.Message ?? "No response from wallet service.");
+                if (response?.isSuccess == true)
+                {
+                    ClearWithdrawData();
+                }
+                MessageBox.Show(response?.Message ?? "No response from wallet service.");
             }
             catch (Exception ex)
             {
@@ -316,7 +335,7 @@ namespace IPB2.WallletTransfer
                 e.Handled = true;
             }
         }
-        private void btnDeposit_Click(object sender, EventArgs e)
+        private async void btnDeposit_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -325,16 +344,15 @@ namespace IPB2.WallletTransfer
                     MessageBox.Show(msg);
                     return;
                 }
-                //var req = new CreateAccountRequestDto(txtName.Text.Trim(), txtCreateMobileno.Text.Trim(),
-                //      txtCreateMobileno.Text.Trim(), txtConfirmPassword.Text.Trim());
+                var req = new WithdrawRequest(txtDepositMobileno.Text.Trim(), txtDepositPassword.Text.Trim(), Convert.ToDecimal(txtDepositAmount.Text.Trim()));
 
-                //var response = await walletService.CreateAccount(req);
+                var response = await walletService.Deposit(req);
 
-                //if (response?.isSuccess == true)
-                //{
-                //    ClearCreateData();
-                //}
-                //MessageBox.Show(response?.Message ?? "No response from wallet service.");
+                if (response?.isSuccess == true)
+                {
+                    ClearDepositData();
+                }
+                MessageBox.Show(response?.Message ?? "No response from wallet service.");
             }
             catch (Exception ex)
             {
@@ -351,5 +369,6 @@ namespace IPB2.WallletTransfer
 
 
 
+        
     }
 }
