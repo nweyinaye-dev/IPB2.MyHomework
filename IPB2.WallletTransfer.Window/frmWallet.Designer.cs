@@ -368,7 +368,6 @@
             // 
             txtWithdrawPassword.Location = new Point(190, 80);
             txtWithdrawPassword.Name = "txtWithdrawPassword";
-            txtWithdrawPassword.PasswordChar = '*';
             txtWithdrawPassword.Size = new Size(139, 23);
             txtWithdrawPassword.TabIndex = 4;
             txtWithdrawPassword.UseSystemPasswordChar = true;
