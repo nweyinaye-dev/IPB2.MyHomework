@@ -145,6 +145,7 @@
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(138, 23);
             txtPassword.TabIndex = 3;
+            txtPassword.UseSystemPasswordChar = true;
             // 
             // txtMobileno
             // 
@@ -222,6 +223,7 @@
             txtConfirmPassword.Name = "txtConfirmPassword";
             txtConfirmPassword.Size = new Size(139, 23);
             txtConfirmPassword.TabIndex = 9;
+            txtConfirmPassword.UseSystemPasswordChar = true;
             // 
             // label8
             // 
@@ -258,6 +260,7 @@
             txtCreatePassword.Name = "txtCreatePassword";
             txtCreatePassword.Size = new Size(139, 23);
             txtCreatePassword.TabIndex = 5;
+            txtCreatePassword.UseSystemPasswordChar = true;
             // 
             // txtCreateMobileno
             // 
@@ -368,6 +371,7 @@
             txtWithdrawPassword.PasswordChar = '*';
             txtWithdrawPassword.Size = new Size(139, 23);
             txtWithdrawPassword.TabIndex = 4;
+            txtWithdrawPassword.UseSystemPasswordChar = true;
             // 
             // txtWithdrawMobileno
             // 
@@ -456,6 +460,7 @@
             txtDepositPassword.Name = "txtDepositPassword";
             txtDepositPassword.Size = new Size(148, 23);
             txtDepositPassword.TabIndex = 4;
+            txtDepositPassword.UseSystemPasswordChar = true;
             // 
             // txtDepositMobileno
             // 
