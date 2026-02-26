@@ -10,7 +10,6 @@ namespace IPB2.WallletTransfer.Window
     {     
         public async Task<Response> Transfer(TransferRequest request)
         {
-
             var sender = await GetByMobileAsync(request.SenderMobileno);
             if (sender == null)
                 return  new Response{ isSuccess = false, Message = "Sender not found." };
