@@ -14,5 +14,7 @@ namespace IPB2.WallletTransfer.Window.Daos
         Task UpdateAsync(TblAccount wallet);
         Task DeleteAsync(int id);
         Task<List<TblAccount>> GetAllAsync();
+
+        Task CreateTransactioinAsync(TblTransactionRecord wallet);
     }
 }

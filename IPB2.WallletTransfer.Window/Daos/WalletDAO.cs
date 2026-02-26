@@ -54,5 +54,11 @@ namespace IPB2.WallletTransfer.Window.Daos
         {
             throw new NotImplementedException();
         }
+
+        public async Task CreateTransactioinAsync(TblTransactionRecord transaction)
+        {
+            await _context.TblTransactionRecords.AddAsync(transaction);
+            await _context.SaveChangesAsync();
+        }
     }
 }

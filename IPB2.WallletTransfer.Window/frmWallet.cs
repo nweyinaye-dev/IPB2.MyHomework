@@ -1,4 +1,3 @@
-using IPB2.EFCore.Database.AppDbContextModels;
 using IPB2.WallletTransfer.Window;
 using IPB2.WallletTransfer.Window.Dtos;
 
@@ -12,12 +11,8 @@ namespace IPB2.WallletTransfer
             InitializeComponent();
         }
 
-        private void frmWallet_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private bool validation(out string msg)
+        #region private methods
+        private bool Validation(out string msg)
         {
             msg = string.Empty;
             if (string.IsNullOrWhiteSpace(this.txtMobileno.Text))
@@ -46,28 +41,154 @@ namespace IPB2.WallletTransfer
             }
             return true;
         }
+        private bool Createvalidation(out string msg)
+        {
+            msg = string.Empty;
+            if (string.IsNullOrWhiteSpace(this.txtName.Text.Trim()))
+            {
+                msg = "Name is required.";
+                this.txtName.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtCreateMobileno.Text.Trim()))
+            {
+                msg = "Mobile number is required.";
+                this.txtCreateMobileno.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtCreatePassword.Text.Trim()))
+            {
+                msg = "Password is required.";
+                this.txtPassword.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtConfirmPassword.Text.Trim()))
+            {
+                msg = "Confirm password is required.";
+                this.txtConfirmPassword.Focus();
+                return false;
+            }
+            if (this.txtCreatePassword.Text.Trim() != this.txtConfirmPassword.Text.Trim())
+            {
+                msg = "Password and confirm password doesn't match.";
+                this.txtConfirmPassword.Text = string.Empty;
+                this.txtConfirmPassword.Focus();
 
+                return false;
+            }
+            return true;
+        }
+        private void ClearData()
+        {
+            txtMobileno.Text = string.Empty;
+            txtPassword.Text = string.Empty;
+            txtRecMobileno.Text = string.Empty;
+            txtBalance.Text = string.Empty;
+            txtMobileno.Focus();
+        }
+        private void ClearCreateData()
+        {
+            txtName.Text = string.Empty;
+            txtCreatePassword.Text = string.Empty;
+            txtConfirmPassword.Text = string.Empty;
+            txtCreateMobileno.Text = string.Empty;
+            txtName.Focus();
+        }
+        #endregion
         private void txtBalance_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (char.IsLetter(e.KeyChar))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private void txtMobileno_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private void txtRecMobileno_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private async void btnTransfer_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (!Validation(out string msg))
+                {
+                    MessageBox.Show(msg);
+                    return;
+                }
+
+                var request = new TransferRequest(txtMobileno.Text.Trim(), txtRecMobileno.Text.Trim(),
+                    Convert.ToDecimal(txtBalance.Text.Trim()), txtPassword.Text.Trim());
+
+                var response = await walletService.Transfer(request);
+
+                if (response?.isSuccess == true)
+                {
+                    ClearData();
+                }
+                MessageBox.Show(response?.Message ?? "No response from wallet service.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during transfer: {ex.Message}");
+            }
+        }
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            ClearData();
+        }
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void txtCreateMobileno_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
         }
 
-        private async void btnTransfer_Click(object sender, EventArgs e)
+        private void btnCreateCancel_Click(object sender, EventArgs e)
         {
-            if (!validation(out string msg))
+            ClearCreateData();
+        }
+
+        private async void btnCreate_Click(object sender, EventArgs e)
+        {
+            try
             {
-                MessageBox.Show(msg);
-                return;
+                if (!Createvalidation(out string msg))
+                {
+                    MessageBox.Show(msg);
+                    return;
+                }
+                var req = new CreateAccountRequestDto(txtName.Text.Trim(), txtCreateMobileno.Text.Trim(),
+                      txtCreateMobileno.Text.Trim(), txtConfirmPassword.Text.Trim());
+
+                var response =await walletService.CreateAccount(req);
+
+                if (response?.isSuccess == true)
+                {
+                    ClearCreateData();
+                }
+                MessageBox.Show(response?.Message ?? "No response from wallet service.");
             }
-
-            var request = new TransferRequest(txtMobileno.Text, txtRecMobileno.Text, Convert.ToDecimal(txtBalance.Text));
-
-
-            var response = await walletService.Transfer(request);
-            MessageBox.Show(response.Message);
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during transfer: {ex.Message}");
+            }
         }
     }
 }

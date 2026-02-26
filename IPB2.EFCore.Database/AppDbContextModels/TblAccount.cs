@@ -5,7 +5,7 @@ namespace IPB2.EFCore.Database.AppDbContextModels;
 
 public partial class TblAccount
 {
-    public string AccountId { get; set; } = null!;
+    public string Id { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
