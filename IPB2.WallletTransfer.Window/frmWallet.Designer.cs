@@ -52,10 +52,28 @@
             label5 = new Label();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            btnWithdrawCancel = new Button();
+            btnWithdraw = new Button();
+            txtWithdrawAmount = new TextBox();
+            txtWithdrawPassword = new TextBox();
+            txtWithdrawMobileno = new TextBox();
+            label11 = new Label();
+            label10 = new Label();
+            label9 = new Label();
             tabPage2 = new TabPage();
+            btnDepositCancel = new Button();
+            btnDeposit = new Button();
+            txtDepositAmount = new TextBox();
+            txtDepositPassword = new TextBox();
+            txtDepositMobileno = new TextBox();
+            label14 = new Label();
+            label13 = new Label();
+            label12 = new Label();
             tbTransfer.SuspendLayout();
             tbCreate.SuspendLayout();
             tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
             SuspendLayout();
             // 
             // tbTransfer
@@ -298,6 +316,14 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(btnWithdrawCancel);
+            tabPage1.Controls.Add(btnWithdraw);
+            tabPage1.Controls.Add(txtWithdrawAmount);
+            tabPage1.Controls.Add(txtWithdrawPassword);
+            tabPage1.Controls.Add(txtWithdrawMobileno);
+            tabPage1.Controls.Add(label11);
+            tabPage1.Controls.Add(label10);
+            tabPage1.Controls.Add(label9);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
@@ -306,8 +332,86 @@
             tabPage1.Text = "Withdraw";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnWithdrawCancel
+            // 
+            btnWithdrawCancel.Location = new Point(254, 190);
+            btnWithdrawCancel.Name = "btnWithdrawCancel";
+            btnWithdrawCancel.Size = new Size(75, 23);
+            btnWithdrawCancel.TabIndex = 7;
+            btnWithdrawCancel.Text = "Cancel";
+            btnWithdrawCancel.UseVisualStyleBackColor = true;
+            btnWithdrawCancel.Click += btnWithdrawCancel_Click;
+            // 
+            // btnWithdraw
+            // 
+            btnWithdraw.Location = new Point(134, 190);
+            btnWithdraw.Name = "btnWithdraw";
+            btnWithdraw.Size = new Size(75, 23);
+            btnWithdraw.TabIndex = 6;
+            btnWithdraw.Text = "Withdraw";
+            btnWithdraw.UseVisualStyleBackColor = true;
+            btnWithdraw.Click += btnWithdraw_Click;
+            // 
+            // txtWithdrawAmount
+            // 
+            txtWithdrawAmount.Location = new Point(190, 128);
+            txtWithdrawAmount.Name = "txtWithdrawAmount";
+            txtWithdrawAmount.Size = new Size(139, 23);
+            txtWithdrawAmount.TabIndex = 5;
+            txtWithdrawAmount.KeyPress += txtWithdrawAmount_KeyPress;
+            // 
+            // txtWithdrawPassword
+            // 
+            txtWithdrawPassword.Location = new Point(190, 80);
+            txtWithdrawPassword.Name = "txtWithdrawPassword";
+            txtWithdrawPassword.Size = new Size(139, 23);
+            txtWithdrawPassword.TabIndex = 4;
+            // 
+            // txtWithdrawMobileno
+            // 
+            txtWithdrawMobileno.Location = new Point(190, 35);
+            txtWithdrawMobileno.Name = "txtWithdrawMobileno";
+            txtWithdrawMobileno.Size = new Size(139, 23);
+            txtWithdrawMobileno.TabIndex = 3;
+            txtWithdrawMobileno.KeyPress += txtWithdrawMobileno_KeyPress;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(84, 136);
+            label11.Name = "label11";
+            label11.Size = new Size(51, 15);
+            label11.TabIndex = 2;
+            label11.Text = "Amount";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(84, 88);
+            label10.Name = "label10";
+            label10.Size = new Size(57, 15);
+            label10.TabIndex = 1;
+            label10.Text = "Password";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(84, 43);
+            label9.Name = "label9";
+            label9.Size = new Size(66, 15);
+            label9.TabIndex = 0;
+            label9.Text = "Mobile No.";
+            // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(btnDepositCancel);
+            tabPage2.Controls.Add(btnDeposit);
+            tabPage2.Controls.Add(txtDepositAmount);
+            tabPage2.Controls.Add(txtDepositPassword);
+            tabPage2.Controls.Add(txtDepositMobileno);
+            tabPage2.Controls.Add(label14);
+            tabPage2.Controls.Add(label13);
+            tabPage2.Controls.Add(label12);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -315,6 +419,74 @@
             tabPage2.TabIndex = 3;
             tabPage2.Text = "Deposit";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnDepositCancel
+            // 
+            btnDepositCancel.Location = new Point(261, 179);
+            btnDepositCancel.Name = "btnDepositCancel";
+            btnDepositCancel.Size = new Size(75, 23);
+            btnDepositCancel.TabIndex = 7;
+            btnDepositCancel.Text = "Cancel";
+            btnDepositCancel.UseVisualStyleBackColor = true;
+            btnDepositCancel.Click += btnDepositCancel_Click;
+            // 
+            // btnDeposit
+            // 
+            btnDeposit.Location = new Point(126, 179);
+            btnDeposit.Name = "btnDeposit";
+            btnDeposit.Size = new Size(75, 23);
+            btnDeposit.TabIndex = 6;
+            btnDeposit.Text = "Deposit";
+            btnDeposit.UseVisualStyleBackColor = true;
+            // 
+            // txtDepositAmount
+            // 
+            txtDepositAmount.Location = new Point(188, 112);
+            txtDepositAmount.Name = "txtDepositAmount";
+            txtDepositAmount.Size = new Size(148, 23);
+            txtDepositAmount.TabIndex = 5;
+            // 
+            // txtDepositPassword
+            // 
+            txtDepositPassword.Location = new Point(188, 66);
+            txtDepositPassword.Name = "txtDepositPassword";
+            txtDepositPassword.Size = new Size(148, 23);
+            txtDepositPassword.TabIndex = 4;
+            // 
+            // txtDepositMobileno
+            // 
+            txtDepositMobileno.Location = new Point(188, 25);
+            txtDepositMobileno.Name = "txtDepositMobileno";
+            txtDepositMobileno.Size = new Size(148, 23);
+            txtDepositMobileno.TabIndex = 3;
+            txtDepositMobileno.KeyPress += txtDepositMobileno_KeyPress;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(106, 120);
+            label14.Name = "label14";
+            label14.Size = new Size(51, 15);
+            label14.TabIndex = 2;
+            label14.Text = "Amount";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(106, 74);
+            label13.Name = "label13";
+            label13.Size = new Size(57, 15);
+            label13.TabIndex = 1;
+            label13.Text = "Password";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(106, 33);
+            label12.Name = "label12";
+            label12.Size = new Size(66, 15);
+            label12.TabIndex = 0;
+            label12.Text = "Mobile No.";
             // 
             // frmWallet
             // 
@@ -331,6 +503,10 @@
             tbCreate.ResumeLayout(false);
             tbCreate.PerformLayout();
             tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -362,6 +538,22 @@
         private Label label8;
         private TabPage tabPage1;
         private TabPage tabPage2;
+        private Label label11;
+        private Label label10;
+        private Label label9;
+        private Button btnWithdrawCancel;
+        private Button btnWithdraw;
+        private TextBox txtWithdrawAmount;
+        private TextBox txtWithdrawPassword;
+        private TextBox txtWithdrawMobileno;
+        private TextBox txtDepositAmount;
+        private TextBox txtDepositPassword;
+        private TextBox txtDepositMobileno;
+        private Label label14;
+        private Label label13;
+        private Label label12;
+        private Button btnDepositCancel;
+        private Button btnDeposit;
         //private Button btnExit;
     }
 }

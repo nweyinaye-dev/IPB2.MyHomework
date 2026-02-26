@@ -78,6 +78,54 @@ namespace IPB2.WallletTransfer
             }
             return true;
         }
+
+        private bool WithdrawValidation(out string msg)
+        {
+            msg = string.Empty;
+            if (string.IsNullOrWhiteSpace(this.txtWithdrawMobileno.Text.Trim()))
+            {
+                msg = "Mobileno is required.";
+                this.txtWithdrawMobileno.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtWithdrawPassword.Text.Trim()))
+            {
+                msg = "Password is required.";
+                this.txtWithdrawPassword.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtWithdrawAmount.Text.Trim()))
+            {
+                msg = "Amount is required.";
+                this.txtWithdrawAmount.Focus();
+                return false;
+            }
+            return true;
+        }
+
+        private bool DepostiValidation(out string msg)
+        {
+            msg = string.Empty;
+            if (string.IsNullOrWhiteSpace(this.txtDepositMobileno.Text.Trim()))
+            {
+                msg = "Mobileno is required.";
+                this.txtDepositMobileno.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtDepositPassword.Text.Trim()))
+            {
+                msg = "Password is required.";
+                this.txtDepositPassword.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(this.txtDepositAmount.Text.Trim()))
+            {
+                msg = "Amount is required.";
+                this.txtDepositAmount.Focus();
+                return false;
+            }
+            return true;
+        }
         private void ClearData()
         {
             txtMobileno.Text = string.Empty;
@@ -93,6 +141,20 @@ namespace IPB2.WallletTransfer
             txtConfirmPassword.Text = string.Empty;
             txtCreateMobileno.Text = string.Empty;
             txtName.Focus();
+        }
+        private void ClearWithdrawData()
+        {
+            txtWithdrawMobileno.Text = string.Empty;
+            txtWithdrawPassword.Text = string.Empty;
+            txtWithdrawAmount.Text = string.Empty;
+            txtWithdrawMobileno.Focus();
+        }
+        private void ClearDepositData()
+        {
+            txtDepositMobileno.Text = string.Empty;
+            txtDepositPassword.Text = string.Empty;
+            txtDepositAmount.Text = string.Empty;
+            txtDepositMobileno.Focus();
         }
         #endregion
         private void txtBalance_KeyPress(object sender, KeyPressEventArgs e)
@@ -177,7 +239,7 @@ namespace IPB2.WallletTransfer
                 var req = new CreateAccountRequestDto(txtName.Text.Trim(), txtCreateMobileno.Text.Trim(),
                       txtCreateMobileno.Text.Trim(), txtConfirmPassword.Text.Trim());
 
-                var response =await walletService.CreateAccount(req);
+                var response = await walletService.CreateAccount(req);
 
                 if (response?.isSuccess == true)
                 {
@@ -190,5 +252,104 @@ namespace IPB2.WallletTransfer
                 MessageBox.Show($"Error during transfer: {ex.Message}");
             }
         }
+
+        #region withdraw panel
+        private void txtWithdrawMobileno_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private void txtWithdrawAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private void btnWithdraw_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!WithdrawValidation(out string msg))
+                {
+                    MessageBox.Show(msg);
+                    return;
+                }
+                //var req = new CreateAccountRequestDto(txtName.Text.Trim(), txtCreateMobileno.Text.Trim(),
+                //      txtCreateMobileno.Text.Trim(), txtConfirmPassword.Text.Trim());
+
+                //var response = await walletService.CreateAccount(req);
+
+                //if (response?.isSuccess == true)
+                //{
+                //    ClearCreateData();
+                //}
+                //MessageBox.Show(response?.Message ?? "No response from wallet service.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during transfer: {ex.Message}");
+            }
+        }
+
+        private void btnWithdrawCancel_Click(object sender, EventArgs e)
+        {
+            ClearWithdrawData();
+        }
+
+        #endregion
+
+        #region deposit panel
+        private void txtDepositMobileno_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private void txtDepositAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        private void btnDeposit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!DepostiValidation(out string msg))
+                {
+                    MessageBox.Show(msg);
+                    return;
+                }
+                //var req = new CreateAccountRequestDto(txtName.Text.Trim(), txtCreateMobileno.Text.Trim(),
+                //      txtCreateMobileno.Text.Trim(), txtConfirmPassword.Text.Trim());
+
+                //var response = await walletService.CreateAccount(req);
+
+                //if (response?.isSuccess == true)
+                //{
+                //    ClearCreateData();
+                //}
+                //MessageBox.Show(response?.Message ?? "No response from wallet service.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during transfer: {ex.Message}");
+            }
+        }
+
+        private void btnDepositCancel_Click(object sender, EventArgs e)
+        {
+            ClearDepositData();
+        }
+
+        #endregion
+
+
+
     }
 }
