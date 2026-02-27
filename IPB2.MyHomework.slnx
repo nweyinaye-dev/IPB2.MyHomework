@@ -2,5 +2,5 @@
   <Project Path="IPB2.EFCore.Database/IPB2.EFCore.Database.csproj" Id="40c83591-6664-4eb2-aaa4-0ad6e8285867" />
   <Project Path="IPB2.Homework/IPB2.CRUDWithADO.csproj" />
   <Project Path="IPB2.WalletTransfer.Dapper/IPB2.WalletTransfer.Dapper.csproj" Id="1a8eee3f-643d-477e-a1ec-033d046b6ec3" />
-  <Project Path="IPB2.WallletTransfer.Window/IPB2.WallletTransfer.Window.csproj" />
+  <Project Path="IPB2.WallletTransfer.Window/IPB2.ATMWindowApp.EFCoe.csproj" />
 </Solution>

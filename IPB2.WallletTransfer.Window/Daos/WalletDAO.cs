@@ -45,20 +45,16 @@ namespace IPB2.WallletTransfer.Window.Daos
             }
         }
 
-        Task<TblAccount?> IWalletDAO.GetByMobileAsync(string mobileNo)
-        {
-            throw new NotImplementedException();
-        }       
-
-        Task<List<TblAccount>> IWalletDAO.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task CreateTransactioinAsync(TblTransactionRecord transaction)
         {
             await _context.TblTransactionRecords.AddAsync(transaction);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<TblTransactionRecord>> GetAllTransactionAsync(string mobileNo)
+        {
+            return await _context.TblTransactionRecords.
+                Where(t => t.FromMobileNo == mobileNo).ToListAsync();
         }
     }
 }

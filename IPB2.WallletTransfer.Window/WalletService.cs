@@ -33,7 +33,7 @@ namespace IPB2.WallletTransfer.Window
         {
             var sender = await GetByMobileAsync(request.SenderMobileno);
             if (sender == null)
-                return  new Response{ isSuccess = false, Message = "Sender not found." };
+                return new Response { isSuccess = false, Message = "Sender not found." };
 
             if (sender.Password != request.Password)
                 return new Response { isSuccess = false, Message = "Invalid password." };
@@ -86,7 +86,7 @@ namespace IPB2.WallletTransfer.Window
 
 
         }
-        
+
         public async Task<Response> Withdraw(WithdrawRequest req) {
             var account = await GetByMobileAsync(req.Mobileno);
             if (account == null)
@@ -121,5 +121,20 @@ namespace IPB2.WallletTransfer.Window
 
         }
 
+        public async Task<TransactionHistoryResponse> GetAllTransactionAsync(string mobileno, string password)
+        {
+            var account = await GetByMobileAsync(mobileno);
+            if (account == null)
+                return new TransactionHistoryResponse { isSuccess = false, Message = "Account not found.", list = null };
+
+            if (account.Password != password)
+                return new TransactionHistoryResponse { isSuccess = false, Message = "Invalid password.",list = null };
+
+            var list = await GetAllTransactionAsync(mobileno);
+            return new TransactionHistoryResponse { isSuccess = true, Message = "success", list = list };
+
+        }
+        
+    
     }
 }
