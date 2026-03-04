@@ -1,12 +1,15 @@
 ﻿namespace IPB2.MyanmarMonths.WebApi.Models;
 
-public class GetAllMyanmarMonthResponse
+public class GetAllMyanmarMonthMmResponse
 {
-    public bool isIsSuccess { get; set; }   
-    public string message { get; set; }
-    public MyanmarMonthModel lst { get; set; }
+    public bool IsSuccess { get; set; }   
+    public string Message { get; set; }
+    public List<MyanmarMonthMm> List { get; set; }
 }
-public class MyanmarMonthModel
+public class MyanmarMonthMm 
 {
-   // public [] Tbl_Months { get; set; }
+    public int Id { get; set; }
+    public string MonthMm { get; set; }
+    public string? ImageUrl { get; set; } 
+    public string? ImageName { get; set; } 
 }

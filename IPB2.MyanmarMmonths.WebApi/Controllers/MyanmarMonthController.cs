@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IPB2.EFCore.Database.AppDbContextModels;
+using IPB2.MyanmarMonths.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IPB2.MyanmarMonths.WebApi.Controllers
@@ -7,10 +8,51 @@ namespace IPB2.MyanmarMonths.WebApi.Controllers
     [ApiController]
     public class MyanmarMonthController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetMyanamrMonths()
+        private readonly AppDbContext _db;
+
+        public MyanmarMonthController()
         {
-            return Ok();
+            _db = new AppDbContext();
         }
-    }
+
+        [HttpGet]
+        public IActionResult GetAllMyanmarMonthMn()
+        {
+            var lst = _db.TblMyanmarMonths
+               .Select(x => new MyanmarMonthMm
+               {
+                   Id = x.Id,
+                   MonthMm = x.MonthMm,
+                   ImageUrl = _db.TblMyanmarMonthsImgs
+                      .Where(img => img.MonthId == x.Id)
+                      .Select(img => img.ImgUrl)
+                      .FirstOrDefault(),
+                   ImageName = _db.TblMyanmarMonthsImgs
+                      .Where(img => img.MonthId == x.Id)
+                      .Select(img => img.ImgName)
+                      .FirstOrDefault(),
+               })
+               .ToList();
+
+                return Ok(new GetAllMyanmarMonthMmResponse
+                {
+                    IsSuccess = true,
+                    Message = "success",
+                    List = lst
+                });
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetAllMyanmarMonthById(int id)
+        {
+            var item = _db.TblMyanmarMonths.FirstOrDefault(x => x.Id == id);
+            if (item is null)
+            {
+                return NotFound(new { Message = "No data found." });
+            }
+
+            return Ok(item);
+        }
+     
+        }
 }
