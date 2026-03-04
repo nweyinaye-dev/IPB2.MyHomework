@@ -1,0 +1,6 @@
+@IPB2.MyanmarMmonths.WebApi_HostAddress = http://localhost:5043
+
+GET {{IPB2.MyanmarMmonths.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
