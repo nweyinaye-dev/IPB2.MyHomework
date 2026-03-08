@@ -15,7 +15,7 @@ namespace IPB2.MyanmarMonths.WebApi.Controllers
             _db = new AppDbContext();
         }
 
-        [HttpGet]
+         [HttpGet]
         public IActionResult GetAllMyanmarMonthMn()
         {
             var lst = _db.TblMyanmarMonths

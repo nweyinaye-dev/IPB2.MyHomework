@@ -1,0 +1,6 @@
+@IPB2.DreamDictionary.WebApi_HostAddress = http://localhost:5179
+
+GET {{IPB2.DreamDictionary.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
