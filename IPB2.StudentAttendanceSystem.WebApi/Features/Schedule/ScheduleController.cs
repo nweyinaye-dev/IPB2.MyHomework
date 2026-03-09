@@ -1,5 +1,7 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
+using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
@@ -35,7 +37,14 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         [HttpPost]
         public async Task<IActionResult> CreateSchedule(CreateScheduleRequest request)
         {
-            return Ok();
+            int rowAffected = await _scheduleService.SaveScheduleAsync(request);
+            string message = rowAffected > 0 ? "Schedule created successfully." : "Failed to create Schedule.";
+            return Ok(new ResponseBaseModel
+            {
+                IsSuccess = true,
+                Message = message
+            });
+
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)

@@ -2,7 +2,7 @@
 {
     public interface IScheduleService
     {
-        Task SaveScheduleAsync(CreateScheduleRequest req);
+        Task<int> SaveScheduleAsync(CreateScheduleRequest req);
         Task<List<ScheduleModel>> GetAllScheduleAsync();
     }
 }

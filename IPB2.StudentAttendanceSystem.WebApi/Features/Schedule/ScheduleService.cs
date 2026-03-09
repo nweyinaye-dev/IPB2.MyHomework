@@ -1,4 +1,5 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
+using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -32,9 +33,21 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             return result;
         }
 
-        public Task SaveScheduleAsync(CreateScheduleRequest req)
+        public  async Task<int> SaveScheduleAsync(CreateScheduleRequest req)
         {
-            throw new NotImplementedException();
+
+            await _dbContext.TblSchedules.AddAsync(new TblSchedule
+            {
+                Id = Guid.NewGuid().ToString(),
+                ScheduleName = req.ScheduleName,
+                ScheduleDays = req.ScheduleDays,
+                StartTime = req.StartTime,
+                EndTime = req.EndTime,
+                IsDelete = false
+            });
+            int rowAffected = await _dbContext.SaveChangesAsync();
+            return rowAffected;
+
         }
     }
 }
