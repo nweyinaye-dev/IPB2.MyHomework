@@ -13,15 +13,14 @@
   <ItemGroup>
     <Folder Include="Features\Class\Controllers\" />
     <Folder Include="Features\Class\Services\" />
-    <Folder Include="Features\Grade\Controllers\" />
-    <Folder Include="Features\Grade\Services\" />
-    <Folder Include="Features\Schedule\Controllers\" />
-    <Folder Include="Features\Schedule\Services\" />
     <Folder Include="Features\StudentEnroll\Controllers\" />
     <Folder Include="Features\StudentEnroll\Services\" />
     <Folder Include="Features\Teacher\Controllers\" />
     <Folder Include="Features\Teacher\Services\" />
-    <Folder Include="Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IPB2.EFCore.Database\IPB2.EFCore.Database.csproj" />
   </ItemGroup>
 
 </Project>
