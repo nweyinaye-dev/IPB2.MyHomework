@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IPB2.EFCore.Database.AppDbContextModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
@@ -12,6 +13,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         {
             _scheduleService = service;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetSchedules()
         {
