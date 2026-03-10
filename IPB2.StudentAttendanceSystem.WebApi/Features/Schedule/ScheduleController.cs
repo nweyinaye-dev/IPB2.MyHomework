@@ -22,17 +22,12 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         {
             List<ScheduleModel> result = await _scheduleService.GetAllScheduleAsync();           
 
-            return result.Count > 0 ? Ok(new GetAllScheduleResponse
+            return Ok(new GetAllScheduleResponse
             {
                 IsSuccess = true,
                 Message = "Get all schedule successfully.",
                 data = result
-            }) : Ok(new GetAllScheduleResponse
-            {
-                IsSuccess = true,
-                Message = "No data.",
-                data = result
-            });
+            }) ;
         }
 
         [HttpPost]
