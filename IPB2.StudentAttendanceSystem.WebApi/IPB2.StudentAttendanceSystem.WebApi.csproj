@@ -7,13 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Class\Controllers\**" />
+    <Compile Remove="Features\Class\Services\**" />
+    <Content Remove="Features\Class\Controllers\**" />
+    <Content Remove="Features\Class\Services\**" />
+    <EmbeddedResource Remove="Features\Class\Controllers\**" />
+    <EmbeddedResource Remove="Features\Class\Services\**" />
+    <None Remove="Features\Class\Controllers\**" />
+    <None Remove="Features\Class\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Class\Controllers\" />
-    <Folder Include="Features\Class\Services\" />
-    <Folder Include="Features\Class\" />
     <Folder Include="Features\Teacher\" />
     <Folder Include="Features\StudentEnroll\" />
     <Folder Include="Features\StudentEnroll\Controllers\" />
