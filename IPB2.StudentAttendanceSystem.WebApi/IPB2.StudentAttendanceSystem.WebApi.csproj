@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Class\Controllers\" />
+    <Folder Include="Features\Class\Services\" />
+    <Folder Include="Features\StudentEnroll\Controllers\" />
+    <Folder Include="Features\StudentEnroll\Services\" />
+    <Folder Include="Features\Teacher\Controllers\" />
+    <Folder Include="Features\Teacher\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IPB2.EFCore.Database\IPB2.EFCore.Database.csproj" />
+  </ItemGroup>
+
+</Project>
