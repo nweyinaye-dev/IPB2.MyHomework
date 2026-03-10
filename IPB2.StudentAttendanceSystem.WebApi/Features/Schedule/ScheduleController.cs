@@ -22,16 +22,13 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         public async Task<IActionResult> GetSchedules()
         {
             List<ScheduleModel> result = await _scheduleService.GetAllScheduleAsync();
-
             string message = result.Count > 0 ? "Get all schedule successfully." : "No data.";
-
             return Ok(new GetAllScheduleResponse
             {
                 IsSuccess = true,
                 Message = message,
                 data = result
             }) ;
-
         }
 
         [HttpPost]
@@ -44,7 +41,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 
             var response = await _scheduleService.SaveScheduleAsync(request);
             return ResponseHelper.ConvertResponseType(response, "Schedule created successfully.");
-
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
@@ -52,7 +48,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         {
             var response = await _scheduleService.UpdateScheduleEntityAsync(request,id);
             return ResponseHelper.ConvertResponseType(response, "Schedule upserted successfully.");
-
         }
 
         [HttpPatch("{id}")] // partially update
@@ -60,9 +55,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         {
             var response = await _scheduleService.UpdateScheduleAsync(request, id);
             return ResponseHelper.ConvertResponseType(response, "Schedule updated successfully.");
-        }
-        
-
+        }  
 
         [HttpPatch("Delete/{id}")] // partially update
         public async Task<IActionResult> DeleteSchedule(string id)
@@ -70,9 +63,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             var response  = await _scheduleService.DeleteScheduleAsync(id);
             return ResponseHelper.ConvertResponseType(response, "Schedule deleted successfully.");
         }
-
-
-
         private ResponseBaseModel Validation(CreateScheduleRequest request)
         {
             // Require Validation
