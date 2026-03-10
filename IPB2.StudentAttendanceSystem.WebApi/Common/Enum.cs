@@ -11,3 +11,11 @@ public enum Days
     Saturday,
     Sunday
 }
+public enum ResponseTypes
+{
+    None = 0,
+    NotFound = 404,
+    AlreadyExists = 409,
+    AlreadyDeleted = -1,
+    Success = 1
+}
