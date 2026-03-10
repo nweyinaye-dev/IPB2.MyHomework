@@ -8,20 +8,23 @@ using System.Globalization;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 {
-    [Route("api/[controller]")]
+    [Route("api/schedules")]
     [ApiController]
-    public class ScheduleController : ControllerBase
+    public class SchedulesController : ControllerBase
     {
         private readonly IScheduleService _scheduleService;
-        public ScheduleController(IScheduleService service)
+        public SchedulesController(IScheduleService service)
         {
             _scheduleService = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSchedules()
+        [HttpGet("{pageNo}/{pageSize}")]
+        public async Task<IActionResult> GetSchedulesList(int pageNo, int pageSize)
         {
-            List<ScheduleModel> result = await _scheduleService.GetAllScheduleAsync();
+            if (pageNo < 0) return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = "Invalid page number." });
+            if (pageSize < 0) return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = "Invalid page size." });
+
+            List<ScheduleModel> result = await _scheduleService.GetAllScheduleAsync(pageNo,pageSize);
             string message = result.Count > 0 ? "Get all schedule successfully." : "No data.";
             return Ok(new GetAllScheduleResponse
             {
@@ -57,7 +60,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             return ResponseHelper.ConvertResponseType(response, "Schedule updated successfully.");
         }  
 
-        [HttpPatch("Delete/{id}")] // partially update
+        [HttpDelete("{id}")] // partially update
         public async Task<IActionResult> DeleteSchedule(string id)
         {
             var response  = await _scheduleService.DeleteScheduleAsync(id);

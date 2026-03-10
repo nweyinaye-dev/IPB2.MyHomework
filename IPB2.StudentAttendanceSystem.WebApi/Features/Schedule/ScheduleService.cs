@@ -21,23 +21,24 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
                    .Where(x => x.IsDelete == false);
             return query;
         }
-        public  async Task<List<ScheduleModel>> GetAllScheduleAsync()
+        public  async Task<List<ScheduleModel>> GetAllScheduleAsync(int pageNo,int pageSize)
         {
-            var result = await ScheduleQuery().Select(x => new ScheduleModel
-            {
-                Id = x.Id,
-                ScheduleName = x.ScheduleName,
-                ScheduleDays = x.ScheduleDays,
-                StartTime = x.StartTime,
-                EndTime = x.EndTime
-            }).ToListAsync();
-            
+            var result = await ScheduleQuery()
+                .OrderByDescending(x => x.ScheduleName)
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new ScheduleModel
+                {
+                    Id = x.Id,
+                    ScheduleName = x.ScheduleName,
+                    ScheduleDays = x.ScheduleDays,
+                    StartTime = x.StartTime,
+                    EndTime = x.EndTime
+                }).ToListAsync();            
             return result;
         }
-
         public  async Task<ResponseTypes> SaveScheduleAsync(CreateScheduleRequest req)
         {
-
             await _dbContext.TblSchedules.AddAsync(new TblSchedule
             {
                 Id = Guid.NewGuid().ToString(),
@@ -51,31 +52,11 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             int rowAffected = await _dbContext.SaveChangesAsync();
             return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
         }
-
-        public async Task<ScheduleModel> GetScheduleByIdAsync(string id)
-        {
-            var schedule = await ScheduleQuery().Select(x=>
-            new ScheduleModel
-            {
-                Id = x.Id,
-                ScheduleName = x.ScheduleName,
-                ScheduleDays = x.ScheduleDays,
-                StartTime = x.StartTime,
-                EndTime = x.EndTime,
-                IsDelete = x.IsDelete
-            }
-            ).FirstOrDefaultAsync(x => x.Id == id);
-            return schedule;
-            
-        }
         public async Task<ResponseTypes> DeleteScheduleAsync(string id)
         {
             var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
-
             if (item is null) return ResponseTypes.NotFound;
-
            // else if (item.IsDelete) return ResponseTypes.AlreadyDeleted;
-
            item.IsDelete = true;
            int rowAffected = await _dbContext.SaveChangesAsync();
            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
@@ -95,7 +76,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
 
         }
-
         public async Task<ResponseTypes> UpdateScheduleAsync(CreateScheduleRequest request,string id)
         {
             var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);

@@ -17,5 +17,5 @@ public enum ResponseTypes
     NotFound = 404,
     AlreadyExists = 409,
     AlreadyDeleted = -1,
-    Success = 1
+    Success = 200
 }
