@@ -16,8 +16,8 @@ public class CreateScheduleRequest
 {
     public string ScheduleName { get; set; } = null!;
     public string ScheduleDays { get; set; } = null!;
-    public string StartTime { get; set; } = null!;
-    public string EndTime { get; set; } = null!;
+    public string StartTime { get; set; } 
+    public string EndTime { get; set; } 
 }
 
 public class GetAllScheduleResponse : ResponseBaseModel

@@ -3,6 +3,7 @@ using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 {
@@ -37,13 +38,23 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         [HttpPost]
         public async Task<IActionResult> CreateSchedule(CreateScheduleRequest request)
         {
+            ResponseBaseModel validationRes = Validation(request);
+
+            if (!validationRes.IsSuccess) 
+                return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
+
             int rowAffected = await _scheduleService.SaveScheduleAsync(request);
-            string message = rowAffected > 0 ? "Schedule created successfully." : "Failed to create Schedule.";
-            return Ok(new ResponseBaseModel
+
+            return rowAffected > 0 ? Ok(new ResponseBaseModel
             {
                 IsSuccess = true,
-                Message = message
+                Message = "Schedule created successfully."
+            }) : StatusCode(500,new ResponseBaseModel
+            {
+                IsSuccess = false,
+                Message = "Failed to create schedule. No rows were affected."
             });
+
 
         }
 
@@ -57,6 +68,38 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         public async Task<IActionResult> UpSchedule()
         {
             return Ok();
+        }
+
+        private ResponseBaseModel Validation(CreateScheduleRequest request)
+        {
+            // Require Validation
+            if (string.IsNullOrWhiteSpace(request.ScheduleName)) 
+                return new ResponseBaseModel { IsSuccess = false, Message = "Schedule name is required." };
+            if (string.IsNullOrWhiteSpace(request.ScheduleDays))
+                return new ResponseBaseModel { IsSuccess = false, Message = "Schedule days is required." };
+            if (string.IsNullOrWhiteSpace(request.StartTime))
+                return new ResponseBaseModel { IsSuccess = false, Message = "Schedule start time is required." };
+            if (string.IsNullOrWhiteSpace(request.EndTime))
+                return new ResponseBaseModel { IsSuccess = false, Message = "Schedule end time is required." };
+
+            // Format Validation
+            foreach (var day in request.ScheduleDays.Split(','))
+            {
+                if (!Enum.TryParse(day.Trim(), out Days result))
+                    return new ResponseBaseModel { IsSuccess = false, Message = $"Invalid schedule day: {day}" };
+            
+            }
+            if (!TimeSpan.TryParseExact(request.StartTime, "hh\\:mm\\:ss", CultureInfo.InvariantCulture, out TimeSpan startTime))
+                return new ResponseBaseModel { IsSuccess = false, Message = "StartTime must be in HH:mm:ss format" };
+
+            if (!TimeSpan.TryParseExact(request.EndTime, "hh\\:mm\\:ss", CultureInfo.InvariantCulture, out TimeSpan endTime))
+                return new ResponseBaseModel { IsSuccess = false, Message = "EndTime must be in HH:mm:ss format" };
+
+            if (endTime <= startTime)
+                return new ResponseBaseModel { IsSuccess = false, Message = "EndTime must be after StartTime" };
+
+            return new ResponseBaseModel { IsSuccess = true, Message = "Validatin successfully."};
+
         }
     }
 }

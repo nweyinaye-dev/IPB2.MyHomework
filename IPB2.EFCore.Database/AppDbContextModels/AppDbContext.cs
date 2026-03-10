@@ -15,15 +15,21 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Answer> Answers { get; set; }
+    public virtual DbSet<BlogDetail> BlogDetails { get; set; }
 
-    public virtual DbSet<Question> Questions { get; set; }
+    public virtual DbSet<BlogHeader> BlogHeaders { get; set; }
 
-    public virtual DbSet<Recipe> Recipes { get; set; }
+    public virtual DbSet<Snake> Snakes { get; set; }
+
+    public virtual DbSet<TblA> TblAs { get; set; }
 
     public virtual DbSet<TblAccount> TblAccounts { get; set; }
 
-    public virtual DbSet<TblBurmeseRecipe> TblBurmeseRecipes { get; set; }
+    public virtual DbSet<TblB> TblBs { get; set; }
+
+    public virtual DbSet<TblBatch> TblBatches { get; set; }
+
+    public virtual DbSet<TblBook> TblBooks { get; set; }
 
     public virtual DbSet<TblClass> TblClasses { get; set; }
 
@@ -35,78 +41,139 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TblSchedule> TblSchedules { get; set; }
 
+    public virtual DbSet<TblSnake> TblSnakes { get; set; }
+
+    public virtual DbSet<TblStudent> TblStudents { get; set; }
+
+    public virtual DbSet<TblStudent1> TblStudents1 { get; set; }
+
     public virtual DbSet<TblTeacher> TblTeachers { get; set; }
 
     public virtual DbSet<TblTransactionRecord> TblTransactionRecords { get; set; }
-
-    public virtual DbSet<TblUserType> TblUserTypes { get; set; }
 
     public virtual DbSet<TblWallet> TblWallets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.;Database=IPB2;User ID=sa;Password=system;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=.;Database=IPB2;User ID=sa;Password=sasa@123;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Answer>(entity =>
+        modelBuilder.Entity<BlogDetail>(entity =>
         {
-            entity.HasKey(e => e.AnswerId).HasName("PK__Answer__D482500408B54D69");
+            entity.HasKey(e => e.BlogDetailId).HasName("PK__BlogDeta__2383E83EDAC19244");
 
-            entity.ToTable("Answer");
+            entity.ToTable("BlogDetail");
 
-            entity.Property(e => e.AnswerImageUrl).HasMaxLength(500);
-            entity.Property(e => e.AnswerName).HasMaxLength(255);
+            entity.Property(e => e.BlogDetailId).ValueGeneratedNever();
         });
 
-        modelBuilder.Entity<Question>(entity =>
+        modelBuilder.Entity<BlogHeader>(entity =>
         {
-            entity.HasKey(e => e.QuestionId).HasName("PK__Question__0DC06FAC04E4BC85");
+            entity.HasKey(e => e.BlogId).HasName("PK__BlogHead__54379E30488F651F");
 
-            entity.ToTable("Question");
+            entity.ToTable("BlogHeader");
 
-            entity.Property(e => e.QuestionName).HasMaxLength(255);
+            entity.Property(e => e.BlogId).ValueGeneratedNever();
+            entity.Property(e => e.BlogTitle).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<Recipe>(entity =>
+        modelBuilder.Entity<Snake>(entity =>
         {
-            entity.HasKey(e => e.Guid).HasName("PK__Recipes__A2B5777C5AEE82B9");
+            entity.HasKey(e => e.Id).HasName("PK__Snakes__3214EC072DD3FD8B");
 
-            entity.Property(e => e.Guid).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.EngName).HasMaxLength(200);
+            entity.Property(e => e.Mmname)
+                .HasMaxLength(200)
+                .HasColumnName("MMName");
+        });
+
+        modelBuilder.Entity<TblA>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Tbl_A");
+
+            entity.Property(e => e.Id)
+                .HasMaxLength(10)
+                .IsFixedLength()
+                .HasColumnName("ID");
         });
 
         modelBuilder.Entity<TblAccount>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC2707F6335A");
-
             entity.ToTable("Tbl_Account");
 
-            entity.HasIndex(e => e.MobileNo, "UQ__Account__D6D73A860AD2A005").IsUnique();
-
             entity.Property(e => e.Id)
-                .HasMaxLength(100)
+                .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.Balance).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.IsDelete).HasColumnName("isDelete");
-            entity.Property(e => e.MobileNo).HasMaxLength(20);
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.Password).HasMaxLength(255);
+            entity.Property(e => e.MobileNo)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Password)
+                .HasMaxLength(20)
+                .IsUnicode(false);
         });
 
-        modelBuilder.Entity<TblBurmeseRecipe>(entity =>
+        modelBuilder.Entity<TblB>(entity =>
         {
-            entity.HasKey(e => e.Guid).HasName("PK__Tbl_Burm__A2B5777C01142BA1");
+            entity
+                .HasNoKey()
+                .ToTable("Tbl_B");
 
-            entity.ToTable("Tbl_Burmese_Recipe");
+            entity.Property(e => e.Id)
+                .HasMaxLength(10)
+                .IsFixedLength()
+                .HasColumnName("ID");
+        });
 
-            entity.Property(e => e.Guid).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(200);
+        modelBuilder.Entity<TblBatch>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Tbl_Batch");
+
+            entity.Property(e => e.BatchId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.BatchName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.FromDate)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+            entity.Property(e => e.InstructorName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.IsDelete).HasColumnName("isDelete");
+            entity.Property(e => e.ToDate)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TblBook>(entity =>
+        {
+            entity.HasKey(e => e.BookId).HasName("PK__Tbl_Book__3DE0C207C9654C3A");
+
+            entity.ToTable("Tbl_Book");
+
+            entity.Property(e => e.BookId).ValueGeneratedNever();
+            entity.Property(e => e.Author).HasMaxLength(100);
+            entity.Property(e => e.BookName).HasMaxLength(100);
+            entity.Property(e => e.Category).HasMaxLength(50);
+            entity.Property(e => e.IsDelete).HasColumnName("isDelete");
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
         });
 
         modelBuilder.Entity<TblClass>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Clas__3214EC072739D489");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Clas__3214EC073290A3F6");
 
             entity.ToTable("Tbl_Class");
 
@@ -124,7 +191,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TblGrade>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Grad__3214EC072B0A656D");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Grad__3214EC07F96C0A2C");
 
             entity.ToTable("Tbl_Grade");
 
@@ -135,7 +202,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TblMyanmarMonth>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Myan__3214EC072A4B4B5E");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Myan__3214EC074E1E1884");
 
             entity.ToTable("Tbl_MyanmarMonths");
 
@@ -158,7 +225,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TblSchedule>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Sche__3214EC072EDAF651");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Sche__3214EC07714370B8");
 
             entity.ToTable("Tbl_Schedule");
 
@@ -169,9 +236,53 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.StartTime).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<TblSnake>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Snak__3214EC073157ADDE");
+
+            entity.ToTable("Tbl_Snake");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.EngName).HasMaxLength(200);
+            entity.Property(e => e.IsDanger).HasMaxLength(10);
+            entity.Property(e => e.IsPoison).HasMaxLength(10);
+            entity.Property(e => e.Mmname)
+                .HasMaxLength(200)
+                .HasColumnName("MMName");
+        });
+
+        modelBuilder.Entity<TblStudent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Stud__3214EC07F1867066");
+
+            entity.ToTable("Tbl_Student");
+
+            entity.Property(e => e.Id).HasMaxLength(100);
+            entity.Property(e => e.ClassId).HasMaxLength(100);
+            entity.Property(e => e.StudentName).HasMaxLength(100);
+            entity.Property(e => e.StudentPhoneno).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<TblStudent1>(entity =>
+        {
+            entity.HasKey(e => e.StudentId).HasName("PK_Tbl_Student");
+
+            entity.ToTable("Tbl_Students");
+
+            entity.Property(e => e.StudentId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ClassNo)
+                .HasMaxLength(8000)
+                .IsUnicode(false);
+            entity.Property(e => e.IsDelete).HasColumnName("isDelete");
+            entity.Property(e => e.ParentName).HasMaxLength(50);
+            entity.Property(e => e.StudentName).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<TblTeacher>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Teac__3214EC07236943A5");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Teac__3214EC0799782015");
 
             entity.ToTable("Tbl_Teacher");
 
@@ -183,49 +294,33 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TblTransactionRecord>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Tbl_Tran__55433A6B267ABA7A");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Tbl_Tran__55433A6B7B513514");
 
             entity.ToTable("Tbl_TransactionRecord");
 
-            entity.Property(e => e.TransactionId).HasMaxLength(50);
+            entity.Property(e => e.TransactionId).HasMaxLength(100);
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.FromMobileNo).HasMaxLength(20);
             entity.Property(e => e.Message).HasMaxLength(500);
+            entity.Property(e => e.Timestamp)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.ToMobileNo).HasMaxLength(20);
-            entity.Property(e => e.TxnId).HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<TblUserType>(entity =>
-        {
-            entity.HasKey(e => e.UserId).HasName("PK__Tbl_User__1788CC4C7D439ABD");
-
-            entity.ToTable("Tbl_User_Type");
-
-            entity.Property(e => e.UserId).ValueGeneratedNever();
-            entity.Property(e => e.UserCode).HasMaxLength(50);
-            entity.Property(e => e.UserEngType).HasMaxLength(100);
-            entity.Property(e => e.UserMmtype)
-                .HasMaxLength(100)
-                .HasColumnName("UserMMType");
+            entity.Property(e => e.TxnId).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblWallet>(entity =>
         {
-            entity.HasKey(e => e.WalletId).HasName("PK__Tbl_Wall__84D4F92E1B0907CE");
+            entity.HasKey(e => e.WalletId).HasName("PK__Tbl_Wall__84D4F92EFB1409BA");
 
             entity.ToTable("Tbl_Wallet");
 
             entity.Property(e => e.WalletId)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasMaxLength(100)
                 .HasColumnName("WalletID");
             entity.Property(e => e.Balance).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.FullName)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.MobileNo)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.FullName).HasMaxLength(200);
+            entity.Property(e => e.MobileNo).HasMaxLength(20);
         });
 
         OnModelCreatingPartial(modelBuilder);

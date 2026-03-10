@@ -13,6 +13,9 @@
   <ItemGroup>
     <Folder Include="Features\Class\Controllers\" />
     <Folder Include="Features\Class\Services\" />
+    <Folder Include="Features\Class\" />
+    <Folder Include="Features\Teacher\" />
+    <Folder Include="Features\StudentEnroll\" />
     <Folder Include="Features\StudentEnroll\Controllers\" />
     <Folder Include="Features\StudentEnroll\Services\" />
     <Folder Include="Features\Teacher\Controllers\" />
