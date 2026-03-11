@@ -9,7 +9,7 @@ public class ScheduleModel
     public string ScheduleDays { get; set; } 
     public string StartTime { get; set; } 
     public string EndTime { get; set; }
-    public int IsDelete { get; set; }
+    public bool IsDelete { get; set; }
 }
 
 public class CreateScheduleRequest

@@ -1,8 +1,13 @@
-﻿namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
+﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
+
+namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 {
     public interface IScheduleService
     {
-        Task<int> SaveScheduleAsync(CreateScheduleRequest req);
-        Task<List<ScheduleModel>> GetAllScheduleAsync();
+        Task<ResponseTypes> SaveScheduleAsync(CreateScheduleRequest req);
+        Task<List<ScheduleModel>> GetAllScheduleAsync(int pageNo, int pageSize);
+        Task<ResponseTypes> DeleteScheduleAsync(string id);
+        Task<ResponseTypes> UpdateScheduleEntityAsync(CreateScheduleRequest req, string id);
+        Task<ResponseTypes> UpdateScheduleAsync(CreateScheduleRequest req, string id);
     }
 }

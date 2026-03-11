@@ -1,4 +1,5 @@
-﻿using IPB2.EFCore.Database.AppDbContextModels;
+﻿using Azure.Core;
+using IPB2.EFCore.Database.AppDbContextModels;
 using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -7,25 +8,28 @@ using System.Globalization;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 {
-    [Route("api/[controller]")]
+    [Route("api/schedules")]
     [ApiController]
-    public class ScheduleController : ControllerBase
+    public class SchedulesController : ControllerBase
     {
         private readonly IScheduleService _scheduleService;
-        public ScheduleController(IScheduleService service)
+        public SchedulesController(IScheduleService service)
         {
             _scheduleService = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSchedules()
+        [HttpGet("{pageNo}/{pageSize}")]
+        public async Task<IActionResult> GetSchedulesList(int pageNo, int pageSize)
         {
-            List<ScheduleModel> result = await _scheduleService.GetAllScheduleAsync();           
+            if (pageNo < 0) return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = "Invalid page number." });
+            if (pageSize < 0) return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = "Invalid page size." });
 
+            List<ScheduleModel> result = await _scheduleService.GetAllScheduleAsync(pageNo,pageSize);
+            string message = result.Count > 0 ? "Get all schedule successfully." : "No data.";
             return Ok(new GetAllScheduleResponse
             {
                 IsSuccess = true,
-                Message = "Get all schedule successfully.",
+                Message = message,
                 data = result
             }) ;
         }
@@ -38,33 +42,30 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             if (!validationRes.IsSuccess) 
                 return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
 
-            int rowAffected = await _scheduleService.SaveScheduleAsync(request);
-
-            return rowAffected > 0 ? Ok(new ResponseBaseModel
-            {
-                IsSuccess = true,
-                Message = "Schedule created successfully."
-            }) : StatusCode(500,new ResponseBaseModel
-            {
-                IsSuccess = false,
-                Message = "Failed to create schedule. No rows were affected."
-            });
-
-
+            var response = await _scheduleService.SaveScheduleAsync(request);
+            return ResponseHelper.ConvertResponseType(response, "Schedule created successfully.");
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
-        public async Task<IActionResult> UpsertSchedule()
+        public async Task<IActionResult> UpsertSchedule(CreateScheduleRequest request,string id)        
         {
-            return Ok();
+            var response = await _scheduleService.UpdateScheduleEntityAsync(request,id);
+            return ResponseHelper.ConvertResponseType(response, "Schedule upserted successfully.");
         }
 
         [HttpPatch("{id}")] // partially update
-        public async Task<IActionResult> UpSchedule()
+        public async Task<IActionResult> UpdateSchedule(CreateScheduleRequest request,string id)
         {
-            return Ok();
-        }
+            var response = await _scheduleService.UpdateScheduleAsync(request, id);
+            return ResponseHelper.ConvertResponseType(response, "Schedule updated successfully.");
+        }  
 
+        [HttpDelete("{id}")] // partially update
+        public async Task<IActionResult> DeleteSchedule(string id)
+        {
+            var response  = await _scheduleService.DeleteScheduleAsync(id);
+            return ResponseHelper.ConvertResponseType(response, "Schedule deleted successfully.");
+        }
         private ResponseBaseModel Validation(CreateScheduleRequest request)
         {
             // Require Validation
