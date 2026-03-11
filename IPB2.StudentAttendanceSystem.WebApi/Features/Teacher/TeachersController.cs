@@ -41,28 +41,33 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Teacher
                 return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
 
             var response = await _teacherService.SaveTeacherAsync(request);
-            return ResponseHelper.ConvertResponseType(response, "Teacher created successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
         public async Task<IActionResult> UpsertTeacher(CreateTeacherRequest request, string id)
         {
+            ResponseBaseModel validationRes = Validation(request);
+
+            if (!validationRes.IsSuccess)
+                return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
+
             var response = await _teacherService.UpdateTeacherAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Teacher upserted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPatch("{id}")] // partially update
         public async Task<IActionResult> UpdatePatchTeacher(UpdatePatchTeacherRequest request, string id)
         {
             var response = await _teacherService.UpdatePatchTeacherAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Teacher updated successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpDelete("{id}")] // partially update
         public async Task<IActionResult> DeleteTeacher(string id)
         {
             var response = await _teacherService.DeleteTeacherAsync(id);
-            return ResponseHelper.ConvertResponseType(response, "Teacher deleted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
         private ResponseBaseModel Validation(CreateTeacherRequest request)
         {

@@ -1,7 +1,9 @@
 using IPB2.EFCore.Database.AppDbContextModels;
+using IPB2.StudentAttendanceSystem.WebApi.Features.Attendance;
 using IPB2.StudentAttendanceSystem.WebApi.Features.Class;
 using IPB2.StudentAttendanceSystem.WebApi.Features.Grade;
 using IPB2.StudentAttendanceSystem.WebApi.Features.Schedule;
+using IPB2.StudentAttendanceSystem.WebApi.Features.StudentEnroll;
 using IPB2.StudentAttendanceSystem.WebApi.Features.Teacher;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,8 @@ builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IClassService, ClassService>();
 builder.Services.AddScoped<IGradeService, GradeService>();
+builder.Services.AddScoped<IStudentsEnrollService, StudentsEnrollService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 var app = builder.Build();
 

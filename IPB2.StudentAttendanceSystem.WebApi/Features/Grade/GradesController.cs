@@ -40,28 +40,28 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Grade
                 return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
 
             var response = await _gradeService.SaveGradeAsync(request);
-            return ResponseHelper.ConvertResponseType(response, "Grade created successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
         public async Task<IActionResult> UpsertGrade(CreateGradeRequest request, string id)
         {
             var response = await _gradeService.UpdateGradeAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Grade upserted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPatch("{id}")] // partially update
         public async Task<IActionResult> UpdateGrade(UpdatePatchGradeRequest request, string id)
         {
             var response = await _gradeService.UpdatePatchGradeAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Grade updated successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpDelete("{id}")] // partially update
         public async Task<IActionResult> DeleteGrade(string id)
         {
             var response = await _gradeService.DeleteGradeAsync(id);
-            return ResponseHelper.ConvertResponseType(response, "Grade deleted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
         private ResponseBaseModel Validation(CreateGradeRequest request)
         {
