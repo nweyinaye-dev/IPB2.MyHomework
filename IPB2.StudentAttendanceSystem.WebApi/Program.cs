@@ -1,6 +1,8 @@
 using IPB2.EFCore.Database.AppDbContextModels;
-using IPB2.StudentAttendanceSystem.WebApi.Common;
+using IPB2.StudentAttendanceSystem.WebApi.Features.Class;
+using IPB2.StudentAttendanceSystem.WebApi.Features.Grade;
 using IPB2.StudentAttendanceSystem.WebApi.Features.Schedule;
+using IPB2.StudentAttendanceSystem.WebApi.Features.Teacher;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IClassService, ClassService>();
+builder.Services.AddScoped<IGradeService, GradeService>();
 
 var app = builder.Build();
 

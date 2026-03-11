@@ -61,7 +61,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
            int rowAffected = await _dbContext.SaveChangesAsync();
            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
         }
-        public async Task<ResponseTypes> UpdateScheduleEntityAsync(CreateScheduleRequest request, string id)
+        public async Task<ResponseTypes> UpdateScheduleAsync(CreateScheduleRequest request, string id)
         {
             var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
 
@@ -76,7 +76,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
 
         }
-        public async Task<ResponseTypes> UpdateScheduleAsync(CreateScheduleRequest request,string id)
+        public async Task<ResponseTypes> UpdatePatchScheduleAsync(UpdatePatchScheduleRequest request,string id)
         {
             var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
 

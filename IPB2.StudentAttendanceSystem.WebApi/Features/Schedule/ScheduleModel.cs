@@ -19,7 +19,13 @@ public class CreateScheduleRequest
     public string StartTime { get; set; } 
     public string EndTime { get; set; } 
 }
-
+public class UpdatePatchScheduleRequest
+{
+    public string? ScheduleName { get; set; } 
+    public string? ScheduleDays { get; set; } 
+    public string? StartTime { get; set; }
+    public string? EndTime { get; set; }
+}
 public class GetAllScheduleResponse : ResponseBaseModel
 {
     public List<ScheduleModel> data { get; set; }

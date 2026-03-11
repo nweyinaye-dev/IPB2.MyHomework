@@ -9,12 +9,20 @@
   <ItemGroup>
     <Compile Remove="Features\Class\Controllers\**" />
     <Compile Remove="Features\Class\Services\**" />
+    <Compile Remove="Features\Teacher\Controllers\**" />
+    <Compile Remove="Features\Teacher\Services\**" />
     <Content Remove="Features\Class\Controllers\**" />
     <Content Remove="Features\Class\Services\**" />
+    <Content Remove="Features\Teacher\Controllers\**" />
+    <Content Remove="Features\Teacher\Services\**" />
     <EmbeddedResource Remove="Features\Class\Controllers\**" />
     <EmbeddedResource Remove="Features\Class\Services\**" />
+    <EmbeddedResource Remove="Features\Teacher\Controllers\**" />
+    <EmbeddedResource Remove="Features\Teacher\Services\**" />
     <None Remove="Features\Class\Controllers\**" />
     <None Remove="Features\Class\Services\**" />
+    <None Remove="Features\Teacher\Controllers\**" />
+    <None Remove="Features\Teacher\Services\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,12 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Teacher\" />
     <Folder Include="Features\StudentEnroll\" />
     <Folder Include="Features\StudentEnroll\Controllers\" />
     <Folder Include="Features\StudentEnroll\Services\" />
-    <Folder Include="Features\Teacher\Controllers\" />
-    <Folder Include="Features\Teacher\Services\" />
   </ItemGroup>
 
   <ItemGroup>

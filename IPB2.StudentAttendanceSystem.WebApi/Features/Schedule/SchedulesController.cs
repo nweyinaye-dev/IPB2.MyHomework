@@ -49,14 +49,14 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
         public async Task<IActionResult> UpsertSchedule(CreateScheduleRequest request,string id)        
         {
-            var response = await _scheduleService.UpdateScheduleEntityAsync(request,id);
+            var response = await _scheduleService.UpdateScheduleAsync(request,id);
             return ResponseHelper.ConvertResponseType(response, "Schedule upserted successfully.");
         }
 
         [HttpPatch("{id}")] // partially update
-        public async Task<IActionResult> UpdateSchedule(CreateScheduleRequest request,string id)
+        public async Task<IActionResult> UpdateSchedule(UpdatePatchScheduleRequest request,string id)
         {
-            var response = await _scheduleService.UpdateScheduleAsync(request, id);
+            var response = await _scheduleService.UpdatePatchScheduleAsync(request, id);
             return ResponseHelper.ConvertResponseType(response, "Schedule updated successfully.");
         }  
 
