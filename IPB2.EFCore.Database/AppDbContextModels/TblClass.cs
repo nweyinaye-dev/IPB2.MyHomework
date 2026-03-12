@@ -9,7 +9,7 @@ public partial class TblClass
 
     public string ClassName { get; set; } = null!;
 
-    public string StartDate { get; set; } = null!;
+    public DateOnly StartDate { get; set; }
 
     public int Duration { get; set; }
 

@@ -43,28 +43,33 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
                 return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
 
             var response = await _scheduleService.SaveScheduleAsync(request);
-            return ResponseHelper.ConvertResponseType(response, "Schedule created successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
         public async Task<IActionResult> UpsertSchedule(CreateScheduleRequest request,string id)        
         {
+            ResponseBaseModel validationRes = Validation(request);
+
+            if (!validationRes.IsSuccess)
+                return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
+
             var response = await _scheduleService.UpdateScheduleAsync(request,id);
-            return ResponseHelper.ConvertResponseType(response, "Schedule upserted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPatch("{id}")] // partially update
         public async Task<IActionResult> UpdateSchedule(UpdatePatchScheduleRequest request,string id)
         {
             var response = await _scheduleService.UpdatePatchScheduleAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Schedule updated successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }  
 
         [HttpDelete("{id}")] // partially update
         public async Task<IActionResult> DeleteSchedule(string id)
         {
             var response  = await _scheduleService.DeleteScheduleAsync(id);
-            return ResponseHelper.ConvertResponseType(response, "Schedule deleted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
         private ResponseBaseModel Validation(CreateScheduleRequest request)
         {

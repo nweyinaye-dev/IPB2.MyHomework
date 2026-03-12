@@ -1,6 +1,5 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
 using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Teacher;
 using Microsoft.EntityFrameworkCore;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Teacher
@@ -13,13 +12,16 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Teacher
         {
             _dbContext = dbContext;
         }
+
         private IQueryable<TblTeacher> TeacherQuery()
         {
             IQueryable<TblTeacher> query = _dbContext.TblTeachers
-                   //.AsNoTracking()
-                   .Where(x => x.IsDelete == false);
+                //.AsNoTracking()
+                .Where(x => x.IsDelete == false);
+
             return query;
         }
+
         public async Task<List<TeacherModel>> GetAllTeacherAsync(int pageNo, int pageSize)
         {
             var result = await TeacherQuery()
@@ -31,11 +33,14 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Teacher
                     Id = x.Id,
                     TeacherName = x.TeacherName,
                     TeacherPhoneno = x.TeacherPhoneno,
-                    TeacherAddress = x.TeacherAddress,
-                }).ToListAsync();
+                    TeacherAddress = x.TeacherAddress
+                })
+                .ToListAsync();
+
             return result;
         }
-        public async Task<ResponseTypes> SaveTeacherAsync(CreateTeacherRequest req)
+
+        public async Task<ServiceResponse> SaveTeacherAsync(CreateTeacherRequest req)
         {
             await _dbContext.TblTeachers.AddAsync(new TblTeacher
             {
@@ -47,51 +52,79 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Teacher
             });
 
             int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
+
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Teacher created successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
-        public async Task<ResponseTypes> DeleteTeacherAsync(string id)
-        {
-            var item = await TeacherQuery().FirstOrDefaultAsync(x => x.Id == id);
-            if (item is null) return ResponseTypes.NotFound;
-            // else if (item.IsDelete) return ResponseTypes.AlreadyDeleted;
-            item.IsDelete = true;
-            int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
-        }
-        public async Task<ResponseTypes> UpdateTeacherAsync(CreateTeacherRequest request, string id)
+
+        public async Task<ServiceResponse> DeleteTeacherAsync(string id)
         {
             var item = await TeacherQuery().FirstOrDefaultAsync(x => x.Id == id);
 
-            if (item is null) return ResponseTypes.NotFound;
+            if (item is null)
+                return new ServiceResponse
+                {
+                    Status = ResponseTypes.NotFound,
+                    Message = "Teacher not found."
+                };
+
+            item.IsDelete = true;
+
+            int rowAffected = await _dbContext.SaveChangesAsync();
+
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Teacher deleted successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
+        }
+
+        public async Task<ServiceResponse> UpdateTeacherAsync(CreateTeacherRequest request, string id)
+        {
+            var item = await TeacherQuery().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (item is null)
+                return new ServiceResponse
+                {
+                    Status = ResponseTypes.NotFound,
+                    Message = "Teacher not found."
+                };
 
             item.TeacherName = request.TeacherName;
             item.TeacherPhoneno = request.TeacherPhoneno;
             item.TeacherAddress = request.TeacherAddress;
 
             int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
 
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Teacher updated successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
-        public async Task<ResponseTypes> UpdatePatchTeacherAsync(UpdatePatchTeacherRequest request, string id)
+
+        public async Task<ServiceResponse> UpdatePatchTeacherAsync(UpdatePatchTeacherRequest request, string id)
         {
             var item = await TeacherQuery().FirstOrDefaultAsync(x => x.Id == id);
 
-            if (item is null) return ResponseTypes.NotFound;
+            if (item is null)
+                return new ServiceResponse
+                {
+                    Status = ResponseTypes.NotFound,
+                    Message = "Teacher not found."
+                };
 
             if (!string.IsNullOrEmpty(request.TeacherName))
-            {
                 item.TeacherName = request.TeacherName;
-            }
+
             if (!string.IsNullOrEmpty(request.TeacherPhoneno))
-            {
                 item.TeacherPhoneno = request.TeacherPhoneno;
-            }
+
             if (!string.IsNullOrEmpty(request.TeacherAddress))
-            {
                 item.TeacherAddress = request.TeacherAddress;
-            }
+
             int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
+
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Teacher updated successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
     }
 }

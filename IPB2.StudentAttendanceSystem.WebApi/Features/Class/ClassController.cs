@@ -41,36 +41,36 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
                 return BadRequest(new ResponseBaseModel { IsSuccess = false, Message = validationRes.Message });
 
             var response = await _classService.SaveClassAsync(request);
-            return ResponseHelper.ConvertResponseType(response, "Class created successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPut("{id}")] // entire object (if not exist, create new one)(if exit, update existing one)
         public async Task<IActionResult> UpsertClass(CreateClassRequest request, string id)
         {
             var response = await _classService.UpdateClassAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Class upserted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
         [HttpPatch("{id}")] // partially update
         public async Task<IActionResult> UpdateClass(UpdatePatchClassRequest request, string id)
         {
             var response = await _classService.UpdatePatchClassAsync(request, id);
-            return ResponseHelper.ConvertResponseType(response, "Class updated successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
 
-        [HttpDelete("{id}")] // partially update
+        [HttpDelete("{id}")] 
         public async Task<IActionResult> DeleteClass(string id)
         {
             var response = await _classService.DeleteClassAsync(id);
-            return ResponseHelper.ConvertResponseType(response, "Class deleted successfully.");
+            return ResponseHelper.ConvertResponseType(response);
         }
         private ResponseBaseModel Validation(CreateClassRequest request)
         {
             // Require Validation
             if (string.IsNullOrWhiteSpace(request.ClassName))
                 return new ResponseBaseModel { IsSuccess = false, Message = "Class name is required." };
-            if (string.IsNullOrWhiteSpace(request.StartDate))
-                return new ResponseBaseModel { IsSuccess = false, Message = "Class start date is required." };
+            //if (string.IsNullOrWhiteSpace(request.StartDate))
+            //    return new ResponseBaseModel { IsSuccess = false, Message = "Class start date is required." };
             if (request.Duration == 0)
                 return new ResponseBaseModel { IsSuccess = false, Message = "Class duration is required." };
             if (string.IsNullOrWhiteSpace(request.ScheduleId))
@@ -78,7 +78,10 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
             if (string.IsNullOrWhiteSpace(request.TeacherId))
                 return new ResponseBaseModel { IsSuccess = false, Message = "Class teacher id is required." };
 
-           
+            //var dateValidationRes = GeneralUtilities.ValidateDateFormat(request.StartDate);
+            //if(!dateValidationRes.IsSuccess)
+            //    return new ResponseBaseModel { IsSuccess = false, Message = dateValidationRes.Message };
+
             return new ResponseBaseModel { IsSuccess = true, Message = "Validatin successfully." };
 
         }

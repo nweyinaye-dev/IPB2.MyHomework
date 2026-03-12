@@ -1,8 +1,6 @@
-﻿using Azure.Core;
-using IPB2.EFCore.Database.AppDbContextModels;
+﻿using IPB2.EFCore.Database.AppDbContextModels;
 using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 {
@@ -14,14 +12,17 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
         {
             _dbContext = dbContext;
         }
+
         private IQueryable<TblSchedule> ScheduleQuery()
         {
             IQueryable<TblSchedule> query = _dbContext.TblSchedules
-                  //.AsNoTracking()
-                   .Where(x => x.IsDelete == false);
+                //.AsNoTracking()
+                .Where(x => x.IsDelete == false);
+
             return query;
         }
-        public  async Task<List<ScheduleModel>> GetAllScheduleAsync(int pageNo,int pageSize)
+
+        public async Task<List<ScheduleModel>> GetAllScheduleAsync(int pageNo, int pageSize)
         {
             var result = await ScheduleQuery()
                 .OrderByDescending(x => x.ScheduleName)
@@ -34,10 +35,13 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
                     ScheduleDays = x.ScheduleDays,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime
-                }).ToListAsync();            
+                })
+                .ToListAsync();
+
             return result;
         }
-        public  async Task<ResponseTypes> SaveScheduleAsync(CreateScheduleRequest req)
+
+        public async Task<ServiceResponse> SaveScheduleAsync(CreateScheduleRequest req)
         {
             await _dbContext.TblSchedules.AddAsync(new TblSchedule
             {
@@ -50,22 +54,42 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             });
 
             int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
+
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Schedule created successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
-        public async Task<ResponseTypes> DeleteScheduleAsync(string id)
-        {
-            var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
-            if (item is null) return ResponseTypes.NotFound;
-           // else if (item.IsDelete) return ResponseTypes.AlreadyDeleted;
-           item.IsDelete = true;
-           int rowAffected = await _dbContext.SaveChangesAsync();
-           return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
-        }
-        public async Task<ResponseTypes> UpdateScheduleAsync(CreateScheduleRequest request, string id)
+
+        public async Task<ServiceResponse> DeleteScheduleAsync(string id)
         {
             var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
 
-            if (item is null) return ResponseTypes.NotFound;
+            if (item is null)
+                return new ServiceResponse
+                {
+                    Status = ResponseTypes.NotFound,
+                    Message = "Schedule not found."
+                };
+
+            item.IsDelete = true;
+
+            int rowAffected = await _dbContext.SaveChangesAsync();
+
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Schedule deleted successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
+        }
+
+        public async Task<ServiceResponse> UpdateScheduleAsync(CreateScheduleRequest request, string id)
+        {
+            var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (item is null)
+                return new ServiceResponse
+                {
+                    Status = ResponseTypes.NotFound,
+                    Message = "Schedule not found."
+                };
 
             item.ScheduleName = request.ScheduleName;
             item.ScheduleDays = request.ScheduleDays;
@@ -73,33 +97,40 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             item.EndTime = request.EndTime;
 
             int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
 
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Schedule updated successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
-        public async Task<ResponseTypes> UpdatePatchScheduleAsync(UpdatePatchScheduleRequest request,string id)
+
+        public async Task<ServiceResponse> UpdatePatchScheduleAsync(UpdatePatchScheduleRequest request, string id)
         {
             var item = await ScheduleQuery().FirstOrDefaultAsync(x => x.Id == id);
 
-            if (item is null) return ResponseTypes.NotFound;
+            if (item is null)
+                return new ServiceResponse
+                {
+                    Status = ResponseTypes.NotFound,
+                    Message = "Schedule not found."
+                };
 
             if (!string.IsNullOrEmpty(request.ScheduleName))
-            {
                 item.ScheduleName = request.ScheduleName;
-            }
+
             if (!string.IsNullOrEmpty(request.ScheduleDays))
-            {
                 item.ScheduleDays = request.ScheduleDays;
-            }
+
             if (!string.IsNullOrEmpty(request.StartTime))
-            {
                 item.StartTime = request.StartTime;
-            }
+
             if (!string.IsNullOrEmpty(request.EndTime))
-            {
                 item.EndTime = request.EndTime;
-            }
+
             int rowAffected = await _dbContext.SaveChangesAsync();
-            return rowAffected > 0 ? ResponseTypes.Success : ResponseTypes.None;
+
+            return rowAffected > 0
+                ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Schedule updated successfully." }
+                : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
     }
 }
