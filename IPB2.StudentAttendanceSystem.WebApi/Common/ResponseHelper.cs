@@ -30,7 +30,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Common
                         StatusCode = 500
                     };
             }
-
           
         }
     }

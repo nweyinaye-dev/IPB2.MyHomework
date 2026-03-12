@@ -36,19 +36,26 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
         }
         public async Task<List<ClassModel>> GetAllClassAsync(int pageNo, int pageSize)
         {
-            var result = await ClassQuery()
-                .OrderByDescending(x => x.ClassName)
+            var query = from cls in _dbContext.TblClasses
+                        join tch in _dbContext.TblTeachers on cls.TeacherId equals tch.Id
+                        join sch in _dbContext.TblSchedules on cls.ScheduleId equals sch.Id
+                        where cls.IsDelete == false
+                        orderby cls.ClassName descending
+                        select new ClassModel
+                        {
+                            Id = cls.Id,
+                            ClassName = cls.ClassName,
+                            StartDate = cls.StartDate,
+                            EndDate = cls.EndDate,
+                            Duration = cls.Duration,
+                            ScheduleName = sch.ScheduleName, 
+                            TeacherName = tch.TeacherName  
+                        };
+            // ်for pagination logic
+            var result = await query
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new ClassModel
-                {
-                    Id = x.Id,
-                    ClassName = x.ClassName,
-                    StartDate = x.StartDate,
-                    Duration = x.Duration,
-                    ScheduleId = x.ScheduleId,
-                    TeacherId = x.TeacherId
-                }).ToListAsync();
+                .ToListAsync();
             return result;
         }
         public async Task<ServiceResponse> SaveClassAsync(CreateClassRequest req)
@@ -69,6 +76,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
                 Id = Guid.NewGuid().ToString(),
                 ClassName = req.ClassName,
                 StartDate = req.StartDate,
+                EndDate = req.EndDate,
                 Duration = req.Duration,
                 ScheduleId = req.ScheduleId,
                 TeacherId = req.TeacherId,
@@ -112,6 +120,7 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
 
             item.ClassName = request.ClassName;
             item.StartDate = request.StartDate;
+            item.EndDate = request.EndDate;
             item.Duration = request.Duration;
             item.ScheduleId = request.ScheduleId;
             item.TeacherId = request.TeacherId;
@@ -131,6 +140,8 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
             if (!string.IsNullOrEmpty(request.ClassName)) item.ClassName = request.ClassName;
 
             if (request.StartDate.HasValue) item.StartDate = request.StartDate.Value;
+
+            if (request.EndDate.HasValue) item.EndDate = request.EndDate.Value;
 
             if (request.Duration != 0) item.Duration = request.Duration;
 

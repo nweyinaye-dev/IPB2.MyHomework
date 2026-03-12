@@ -6,7 +6,6 @@ public class ScheduleModel
 {
     public string Id { get; set; }
     public string ScheduleName { get; set; } 
-    public string ScheduleDays { get; set; } 
     public string StartTime { get; set; } 
     public string EndTime { get; set; }
     public bool IsDelete { get; set; }
@@ -15,14 +14,12 @@ public class ScheduleModel
 public class CreateScheduleRequest
 {
     public string ScheduleName { get; set; } = null!;
-    public string ScheduleDays { get; set; } = null!;
     public string StartTime { get; set; } 
     public string EndTime { get; set; } 
 }
 public class UpdatePatchScheduleRequest
 {
     public string? ScheduleName { get; set; } 
-    public string? ScheduleDays { get; set; } 
     public string? StartTime { get; set; }
     public string? EndTime { get; set; }
 }

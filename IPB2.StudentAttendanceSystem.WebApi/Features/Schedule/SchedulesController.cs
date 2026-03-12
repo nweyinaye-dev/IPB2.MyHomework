@@ -76,20 +76,12 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             // Require Validation
             if (string.IsNullOrWhiteSpace(request.ScheduleName)) 
                 return new ResponseBaseModel { IsSuccess = false, Message = "Schedule name is required." };
-            if (string.IsNullOrWhiteSpace(request.ScheduleDays))
-                return new ResponseBaseModel { IsSuccess = false, Message = "Schedule days is required." };
             if (string.IsNullOrWhiteSpace(request.StartTime))
                 return new ResponseBaseModel { IsSuccess = false, Message = "Schedule start time is required." };
             if (string.IsNullOrWhiteSpace(request.EndTime))
                 return new ResponseBaseModel { IsSuccess = false, Message = "Schedule end time is required." };
 
             // Format Validation
-            foreach (var day in request.ScheduleDays.Split(','))
-            {
-                if (!Enum.TryParse(day.Trim(), out Days result))
-                    return new ResponseBaseModel { IsSuccess = false, Message = $"Invalid schedule day: {day}" };
-            
-            }
             if (!TimeSpan.TryParseExact(request.StartTime, "hh\\:mm\\:ss", CultureInfo.InvariantCulture, out TimeSpan startTime))
                 return new ResponseBaseModel { IsSuccess = false, Message = "StartTime must be in HH:mm:ss format" };
 

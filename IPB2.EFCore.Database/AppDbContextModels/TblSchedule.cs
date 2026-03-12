@@ -9,8 +9,6 @@ public partial class TblSchedule
 
     public string ScheduleName { get; set; } = null!;
 
-    public string ScheduleDays { get; set; } = null!;
-
     public string StartTime { get; set; } = null!;
 
     public string EndTime { get; set; } = null!;

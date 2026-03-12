@@ -196,27 +196,86 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Attendance
                 : new ServiceResponse { Status = ResponseTypes.None, Message = "Failed. No rows were affected." };
         }
 
-        public async Task<ServiceResponse> CalculateAttendanceAsync(CalculateAttendanceRequest req)
+        private  async Task<List<TblAttendance>> CreateAttendanceList(CalculateAttendanceRequest req)
         {
-
-            string status = "absent";
-            string lateMinutes = "";
             List<TblAttendance> attendanceRecords = new List<TblAttendance>();
 
-            TblAttendance attendance = new TblAttendance
+            var list = await (from att in _dbContext.TblAttendanceLogs
+                             join cls in _dbContext.TblClasses on att.ClassId equals cls.Id
+                             join sch in _dbContext.TblSchedules on cls.ScheduleId equals sch.Id
+                             where att.StudentEnrollId == req.StudentEnrollId
+                                && att.ClassId == req.ClassId
+                                && att.AttendanceDate >= req.FromDate
+                                && att.AttendanceDate <= req.ToDate
+                                && att.IsDelete == false
+                             select new
+                             {
+                                 AttendaceDate = att.AttendanceDate,
+                                 ActualTimeIn = att.TimeIn,
+                                 ActualTimeOut = att.TimeOut,
+                                 ScheduledStartTime = sch.StartTime
+                             }).ToListAsync();
+
+            for (DateOnly date = req.FromDate; date <= req.ToDate; date = date.AddDays(1))
             {
-                Id = Guid.NewGuid().ToString(),
-                AttendanceDate = req.FromDate,
-                ClassId = req.ClassId,
-                StudentEnrollId = req.StudentEnrollId,
-                TimeIn = "",
-                TimeOut = "",
-                Status = status,
-                Late = lateMinutes,
-                IsDelete = false,
+                string status = "absent";
+                string lateMinutes = "";
+                string timeIn = "";
+                string timeOut = "";
 
-            };
+                var attLog = list.FirstOrDefault(x => x.AttendaceDate == date);
 
+                if (attLog != null)
+                {
+                    timeIn = attLog.ActualTimeIn;
+                    timeOut = attLog.ActualTimeOut;
+
+                    // Logic for Late/Present
+                    if (DateTime.TryParse(attLog.ActualTimeIn, out DateTime parsedTime) &&
+                        DateTime.TryParse(attLog.ScheduledStartTime, out DateTime scheduleStartTime))
+                    {
+                        TimeSpan difference = parsedTime.TimeOfDay - scheduleStartTime.TimeOfDay;
+
+                        if (difference.TotalMinutes > 15)
+                        {
+                            lateMinutes = ((int)difference.TotalMinutes).ToString();
+                            status = "late";
+                        }
+                        else
+                        {
+                            status = "present";
+                        }
+                    }
+                }
+                else
+                {
+                    var isLeaveExist = await LeaveQuery().AnyAsync(x => x.StudentEnrollId == req.StudentEnrollId
+                                        && x.LeaveDate == date);
+
+                    status = isLeaveExist ? "leave" : "absent";
+                }
+
+                attendanceRecords.Add(new TblAttendance
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AttendanceDate = date, 
+                    ClassId = req.ClassId,
+                    StudentEnrollId = req.StudentEnrollId,
+                    TimeIn = timeIn,
+                    TimeOut = timeOut,
+                    Status = status,
+                    Late = lateMinutes,
+                    IsDelete = false
+                });
+            }
+
+            return attendanceRecords;
+        }
+        public async Task<ServiceResponse> CalculateAttendanceAsync(CalculateAttendanceRequest req)
+        {
+            List<TblAttendance> attendanceRecords = new List<TblAttendance>();
+
+            // validation
             var isStudentEnrollIdExist = await StudentQuery().AnyAsync(x => x.Id == req.StudentEnrollId);
 
             if (!isStudentEnrollIdExist)
@@ -227,72 +286,18 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Attendance
             if (!isSClassEnrollIdExist)
                 return new ServiceResponse { Status = ResponseTypes.NotFound, Message = "Class id not found." };
 
-            var isLeaveExist = await LeaveQuery().AnyAsync(x => x.Id == req.ClassId && x.StudentEnrollId == req.StudentEnrollId
-                                && x.LeaveDate == req.FromDate);
+            // calculate attendance result - if exit log - present or late or absent, else no exit log - absent or leave
+            attendanceRecords = await CreateAttendanceList(req);
 
-            if (isLeaveExist)
-                status = "leave";
+           var existingAttendance = _dbContext.TblAttendances.Where(x => x.StudentEnrollId == req.StudentEnrollId
+                                        && x.ClassId == req.ClassId 
+                                        && x.AttendanceDate >= req.FromDate
+                                        && x.AttendanceDate <= req.ToDate);
 
+            _dbContext.RemoveRange(existingAttendance); // delete exiting attendance data
 
-            var item = await AttendanceQuery().FirstOrDefaultAsync(x => x.StudentEnrollId == req.StudentEnrollId && x.ClassId == req.ClassId
-                                && x.AttendanceDate == req.FromDate); // to delete
-            if(item is not null)
-            {
-                var list = await (from att in _dbContext.TblAttendanceLogs
-                                  join cls in _dbContext.TblClasses on att.ClassId equals cls.Id
-                                  join sch in _dbContext.TblSchedules on cls.ScheduleId equals sch.Id
-                                  where att.StudentEnrollId == req.StudentEnrollId
-                                     && att.AttendanceDate >= req.FromDate 
-                                     && att.AttendanceDate <= req.ToDate
-                                  select new
-                                  {
-                                      AttendaceDate = att.AttendanceDate,
-                                      ActualTimeIn = att.TimeIn,
-                                      ActualTimeOut = att.TimeOut,
-                                      ScheduledStartTime = sch.StartTime
-                                  }).ToListAsync();
-
-                
-
-                foreach (var data in list)
-                {
-                     status = "absent";
-                     lateMinutes = "";
-
-                    if (DateTime.TryParse(data.ActualTimeIn, out DateTime parsedTime) &&
-                                DateTime.TryParse(data.ScheduledStartTime, out DateTime scheduleStartTime))
-                    {
-                        TimeSpan actualTime = parsedTime.TimeOfDay;
-                        TimeSpan scheduledTime = scheduleStartTime.TimeOfDay;
-                        TimeSpan difference = actualTime - scheduledTime;
-
-                        if (difference.TotalMinutes > 15)
-                        {
-                            lateMinutes = ((int)difference.TotalMinutes).ToString();
-                            status = "late";
-                        } else status  = "present";
-                    }
-                    attendance = new TblAttendance
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        AttendanceDate = data.AttendaceDate,
-                        ClassId = req.ClassId,
-                        StudentEnrollId = req.StudentEnrollId,
-                        TimeIn = data.ActualTimeIn,
-                        TimeOut = data.ActualTimeOut,
-                        Status = status,
-                        Late = lateMinutes,
-                        IsDelete = false,
-
-                    };
-                    attendanceRecords.Add(attendance);
-                }
-                
-            }
-
-
-            await _dbContext.TblAttendances.AddRangeAsync(attendanceRecords);
-            int rowAffected = await _dbContext.SaveChangesAsync();
+           await _dbContext.TblAttendances.AddRangeAsync(attendanceRecords);
+           int rowAffected = await _dbContext.SaveChangesAsync();
 
             return rowAffected > 0
                 ? new ServiceResponse { Status = ResponseTypes.Success, Message = "Attendance calculated successfully." }

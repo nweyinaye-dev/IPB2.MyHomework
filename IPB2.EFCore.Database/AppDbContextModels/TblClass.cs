@@ -11,6 +11,8 @@ public partial class TblClass
 
     public DateOnly StartDate { get; set; }
 
+    public DateOnly EndDate { get; set; }
+
     public int Duration { get; set; }
 
     public string ScheduleId { get; set; } = null!;

@@ -32,7 +32,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
                 {
                     Id = x.Id,
                     ScheduleName = x.ScheduleName,
-                    ScheduleDays = x.ScheduleDays,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime
                 })
@@ -47,7 +46,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
             {
                 Id = Guid.NewGuid().ToString(),
                 ScheduleName = req.ScheduleName,
-                ScheduleDays = req.ScheduleDays,
                 StartTime = req.StartTime,
                 EndTime = req.EndTime,
                 IsDelete = false
@@ -92,7 +90,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
                 };
 
             item.ScheduleName = request.ScheduleName;
-            item.ScheduleDays = request.ScheduleDays;
             item.StartTime = request.StartTime;
             item.EndTime = request.EndTime;
 
@@ -116,9 +113,6 @@ namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
 
             if (!string.IsNullOrEmpty(request.ScheduleName))
                 item.ScheduleName = request.ScheduleName;
-
-            if (!string.IsNullOrEmpty(request.ScheduleDays))
-                item.ScheduleDays = request.ScheduleDays;
 
             if (!string.IsNullOrEmpty(request.StartTime))
                 item.StartTime = request.StartTime;
