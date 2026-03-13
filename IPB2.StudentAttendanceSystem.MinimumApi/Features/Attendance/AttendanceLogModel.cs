@@ -1,7 +1,7 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Schedule;
+﻿
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Attendance;
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Attendance;
 
 public class AttendanceLogModel
 {

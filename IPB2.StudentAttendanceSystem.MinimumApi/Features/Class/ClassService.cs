@@ -1,9 +1,7 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
-using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Class
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Class
 {
     public class ClassService : IClassService
     {

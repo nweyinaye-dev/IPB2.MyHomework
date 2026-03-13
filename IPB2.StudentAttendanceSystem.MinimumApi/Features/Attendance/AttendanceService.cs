@@ -1,7 +1,7 @@
-﻿using Azure.Core;
+﻿
 using IPB2.EFCore.Database.AppDbContextModels;
-using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Class;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Attendance;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 

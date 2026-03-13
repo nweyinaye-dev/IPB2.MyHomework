@@ -1,0 +1,6 @@
+@IPB2.StudentAttendanceSystem.MinimumApi_HostAddress = http://localhost:5041
+
+GET {{IPB2.StudentAttendanceSystem.MinimumApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

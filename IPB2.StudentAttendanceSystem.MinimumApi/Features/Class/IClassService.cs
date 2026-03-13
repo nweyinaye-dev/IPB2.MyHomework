@@ -1,0 +1,15 @@
+﻿
+
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Class
+{
+    public interface IClassService
+    {
+        Task<ServiceResponse> SaveClassAsync(CreateClassRequest req);
+        Task<List<ClassModel>> GetAllClassAsync(int pageNo, int pageSize);
+        Task<ServiceResponse> DeleteClassAsync(string id);
+        Task<ServiceResponse> UpdateClassAsync(CreateClassRequest req, string id);
+        Task<ServiceResponse> UpdatePatchClassAsync(UpdatePatchClassRequest req, string id);
+    }
+}
