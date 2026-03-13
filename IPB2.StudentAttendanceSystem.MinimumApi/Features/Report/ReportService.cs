@@ -3,7 +3,7 @@ using IPB2.EFCore.Database.AppDbContextModels;
 using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Report
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Report
 {
     public class ReportService : IReportService
     {

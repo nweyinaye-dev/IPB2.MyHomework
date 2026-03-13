@@ -1,8 +1,9 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
 using IPB2.StudentAttendanceSystem.WebApi.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Grade
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Grade
 {
     public class GradeService : IGradeService
     {

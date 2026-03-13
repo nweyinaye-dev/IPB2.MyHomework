@@ -1,34 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace IPB2.StudentAttendanceSystem.MinimumApi.Common
+﻿namespace IPB2.StudentAttendanceSystem.MinimumApi.Common
 {
     public class ResponseHelper
     {
-        public static IActionResult ConvertResponseType(ServiceResponse status)
+        public static IResult ConvertResponseType(ServiceResponse status)
         {
             switch (status.Status)
             {
                 case ResponseTypes.NotFound:
-                    return new Microsoft.AspNetCore.Mvc.NotFoundObjectResult(
+                    return Results.NotFound(
                     new ResponseBaseModel { IsSuccess = false, Message = status.Message ?? "Resource not found." });
                 case ResponseTypes.AlreadyDeleted:
-                    return new Microsoft.AspNetCore.Mvc.OkObjectResult(
+                    return Results.Ok(
                      new ResponseBaseModel { IsSuccess = false, Message = status.Message ??  "Resource already deleted." });
                 case ResponseTypes.AlreadyExists:
-                    return new Microsoft.AspNetCore.Mvc.ConflictObjectResult(
+                    return Results.Ok(
                     new ResponseBaseModel { IsSuccess = false, Message = status.Message ?? "Resource already exists." });
                 case ResponseTypes.None:
-                    return new Microsoft.AspNetCore.Mvc.OkObjectResult(
+                    return Results.Ok(
                     new ResponseBaseModel { IsSuccess = false, Message = status.Message ?? "Failed. No rows were affected." });
                 case ResponseTypes.Success:
-                    return new Microsoft.AspNetCore.Mvc.OkObjectResult(
-                    new ResponseBaseModel { IsSuccess = true, Message = status.Message ?? "Process done successfully." });
+                    return  Results.Ok(new ResponseBaseModel { IsSuccess = true, Message = status.Message ?? "Process done successfully." });
                 default:
-                    return new Microsoft.AspNetCore.Mvc.ObjectResult(
-                     new ResponseBaseModel { IsSuccess = false, Message = status.Message ?? "Unexpected error." })
-                    {
-                        StatusCode = 500
-                    };
+                    return Results.Json(
+                        data: new ResponseBaseModel { IsSuccess = false, Message = status.Message ?? "Unexpected error." },
+                        statusCode: 500
+                    );
             }
           
         }

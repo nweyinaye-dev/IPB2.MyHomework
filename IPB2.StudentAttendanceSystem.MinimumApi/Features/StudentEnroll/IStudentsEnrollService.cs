@@ -1,7 +1,8 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
+﻿using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+using IPB2.StudentAttendanceSystem.WebApi.Common;
 
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.StudentEnroll
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.StudentEnroll
 {
     public interface IStudentsEnrollService
     {
