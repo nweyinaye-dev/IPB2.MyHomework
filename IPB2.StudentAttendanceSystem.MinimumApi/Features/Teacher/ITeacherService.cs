@@ -1,4 +1,6 @@
 ﻿
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+
 namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Teacher
 {
     public interface ITeacherService

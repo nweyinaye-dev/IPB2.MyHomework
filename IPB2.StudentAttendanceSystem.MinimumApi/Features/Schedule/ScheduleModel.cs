@@ -1,6 +1,8 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
+﻿
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Schedule;
 
 public class ScheduleModel
 {

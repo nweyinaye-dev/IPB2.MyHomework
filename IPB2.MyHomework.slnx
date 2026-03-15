@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="../IPB2.StudentAttendanceSystem.MinimumApi/IPB2.StudentAttendanceSystem.MinimumApi/IPB2.StudentAttendanceSystem.MinimumApi.csproj" />
   <Project Path="IPB2.DreamDictionary.WebApi/IPB2.DreamDictionary.WebApi.csproj" Id="37d96b30-68bb-4bf3-ab4e-d8c3a989f9b8" />
   <Project Path="IPB2.EFCore.Database/IPB2.EFCore.Database.csproj" Id="40c83591-6664-4eb2-aaa4-0ad6e8285867" />
   <Project Path="IPB2.Homework/IPB2.CRUDWithADO.csproj" />

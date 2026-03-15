@@ -1,7 +1,8 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Grade;
+﻿
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Grade
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Grade
 {
     public interface IGradeService
     {

@@ -3,9 +3,8 @@ using IPB2.EFCore.Database.AppDbContextModels;
 using IPB2.StudentAttendanceSystem.MinimumApi.Common;
 using IPB2.StudentAttendanceSystem.MinimumApi.Features.Attendance;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Attendance
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Attendance
 {
     public class AttendanceService : IAttendanceService
     {

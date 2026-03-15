@@ -1,11 +1,9 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
-using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Attendance;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Leave;
-using IPB2.StudentLeaveSystem.WebApi.Features.Leave;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+using IPB2.StudentLeaveSystem.MinimumApi.Features.Leave;
 using Microsoft.EntityFrameworkCore;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Leave
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Leave
 {
     public class LeaveService : ILeaveService
     {

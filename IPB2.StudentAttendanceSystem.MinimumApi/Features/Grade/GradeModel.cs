@@ -1,6 +1,8 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
+﻿
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Grade;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Grade;
 
 public class GradeModel
 {

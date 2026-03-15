@@ -1,7 +1,8 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentLeaveSystem.WebApi.Features.Leave;
+﻿
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Report
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Report;
+
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Report
 {
     public interface IReportService
     {

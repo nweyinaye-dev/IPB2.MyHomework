@@ -1,8 +1,8 @@
 ﻿using IPB2.EFCore.Database.AppDbContextModels;
-using IPB2.StudentAttendanceSystem.WebApi.Common;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Schedule
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Schedule
 {
     public class ScheduleService : IScheduleService
     {

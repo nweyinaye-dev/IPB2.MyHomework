@@ -1,5 +1,7 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
-namespace IPB2.StudentLeaveSystem.WebApi.Features.Leave;
+﻿
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+
+namespace IPB2.StudentLeaveSystem.MinimumApi.Features.Leave;
 
 public class LeaveModel
 {

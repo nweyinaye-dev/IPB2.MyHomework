@@ -1,17 +1,19 @@
+
 using IPB2.EFCore.Database.AppDbContextModels;
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Attendance;
 using IPB2.StudentAttendanceSystem.MinimumApi.Features.Class;
-using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Attendance;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Class;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Grade;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Leave;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Report;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Schedule;
-using IPB2.StudentAttendanceSystem.WebApi.Features.StudentEnroll;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Teacher;
-using IPB2.StudentLeaveSystem.WebApi.Features.Leave;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Grade;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Leave;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Report;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Schedule;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.StudentEnroll;
+using IPB2.StudentAttendanceSystem.MinimumApi.Features.Teacher;
+using IPB2.StudentLeaveSystem.MinimumApi.Features.Leave;
 using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,70 +40,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-#region schedule controller
-// Schedules Group
-var schedules = app.MapGroup("/api/schedules");
-
-schedules.MapGet("/{pageNo}/{pageSize}", async (int pageNo, int pageSize, IScheduleService _scheduleService) =>
-{
-    if (pageNo < 0) return Results.BadRequest(new { IsSuccess = false, Message = "Invalid page number." });
-    if (pageSize < 0) return Results.BadRequest(new { IsSuccess = false, Message = "Invalid page size." });
-
-    var result = await _scheduleService.GetAllScheduleAsync(pageNo, pageSize);
-    string message = result.Count > 0 ? "Get all schedule successfully." : "No data.";
-
-    return Results.Ok(new { IsSuccess = true, Message = message, data = result });
-});
-
-schedules.MapPost("/", async (CreateScheduleRequest request, IScheduleService _scheduleService) =>
-{
-    var validationRes = ValidateSchedule(request);
-    if (!validationRes.IsSuccess) return Results.BadRequest(validationRes);
-
-    var response = await _scheduleService.SaveScheduleAsync(request);
-    return Results.Ok(response); // Assuming ResponseHelper logic is handled or simplified here
-});
-
-schedules.MapPut("/{id}", async (string id, CreateScheduleRequest request, IScheduleService _scheduleService) =>
-{
-    var validationRes = ValidateSchedule(request);
-    if (!validationRes.IsSuccess) return Results.BadRequest(validationRes);
-
-    var response = await _scheduleService.UpdateScheduleAsync(request, id);
-    return Results.Ok(response);
-});
-
-schedules.MapPatch("/{id}", async (string id, UpdatePatchScheduleRequest request, IScheduleService _scheduleService) =>
-{
-    var response = await _scheduleService.UpdatePatchScheduleAsync(request, id);
-    return Results.Ok(response);
-});
-
-schedules.MapDelete("/{id}", async (string id, IScheduleService _scheduleService) =>
-{
-    var response = await _scheduleService.DeleteScheduleAsync(id);
-    return Results.Ok(response);
-});
-static ResponseBaseModel ValidateSchedule(CreateScheduleRequest request)
-{
-    if (string.IsNullOrWhiteSpace(request.ScheduleName))
-        return new ResponseBaseModel { IsSuccess = false, Message = "Schedule name is required." };
-
-    if (!TimeSpan.TryParseExact(request.StartTime, "hh\\:mm\\:ss", null, out var startTime))
-        return new ResponseBaseModel { IsSuccess = false, Message = "StartTime must be in HH:mm:ss format" };
-
-    if (!TimeSpan.TryParseExact(request.EndTime, "hh\\:mm\\:ss", null, out var endTime))
-        return new ResponseBaseModel { IsSuccess = false, Message = "EndTime must be in HH:mm:ss format" };
-
-    if (endTime <= startTime)
-        return new ResponseBaseModel { IsSuccess = false, Message = "EndTime must be after StartTime" };
-
-    return new ResponseBaseModel { IsSuccess = true };
-}
-#endregion
-
 # region teacher controller
-var teacherApi = app.MapGroup("/api/teachers");
+var teacherApi = app.MapGroup("/api/teachers").WithTags("Teacher Endpoints");
 
 // GET: /api/teachers/{pageNo}/{pageSize}
 teacherApi.MapGet("/{pageNo:int}/{pageSize:int}", async (int pageNo, int pageSize, ITeacherService _teacherService) =>
@@ -127,7 +67,7 @@ teacherApi.MapPost("/", async (CreateTeacherRequest request, ITeacherService _te
     if (!validationRes.IsSuccess) return Results.BadRequest(validationRes);
 
     var response = await _teacherService.SaveTeacherAsync(request);
-    return Results.Ok(response); // Or use your ResponseHelper logic
+    return ResponseHelper.ConvertResponseType(response);
 });
 
 // PUT: /api/teachers/{id}
@@ -137,21 +77,21 @@ teacherApi.MapPut("/{id}", async (string id, CreateTeacherRequest request, ITeac
     if (!validationRes.IsSuccess) return Results.BadRequest(validationRes);
 
     var response = await _teacherService.UpdateTeacherAsync(request, id);
-    return Results.Ok(response);
+    return ResponseHelper.ConvertResponseType(response);
 });
 
 // PATCH: /api/teachers/{id}
 teacherApi.MapPatch("/{id}", async (string id, UpdatePatchTeacherRequest request, ITeacherService _teacherService) =>
 {
     var response = await _teacherService.UpdatePatchTeacherAsync(request, id);
-    return Results.Ok(response);
+    return ResponseHelper.ConvertResponseType(response);
 });
 
 // DELETE: /api/teachers/{id}
 teacherApi.MapDelete("/{id}", async (string id, ITeacherService _teacherService) =>
 {
     var response = await _teacherService.DeleteTeacherAsync(id);
-    return Results.Ok(response);
+    return ResponseHelper.ConvertResponseType(response);
 });
 
 // 3. Validation Helper
@@ -168,8 +108,70 @@ static ResponseBaseModel ValidateTeacher(CreateTeacherRequest request)
 }
 # endregion
 
+#region schedule controller
+// Schedules Group
+var schedules = app.MapGroup("/api/schedules").WithTags("Schedule Endpoints");
+
+schedules.MapGet("/{pageNo}/{pageSize}", async (int pageNo, int pageSize, IScheduleService _scheduleService) =>
+{
+    if (pageNo < 0) return Results.BadRequest(new { IsSuccess = false, Message = "Invalid page number." });
+    if (pageSize < 0) return Results.BadRequest(new { IsSuccess = false, Message = "Invalid page size." });
+
+    var result = await _scheduleService.GetAllScheduleAsync(pageNo, pageSize);
+    string message = result.Count > 0 ? "Get all schedule successfully." : "No data.";
+
+    return Results.Ok(new { IsSuccess = true, Message = message, data = result });
+});
+
+schedules.MapPost("/", async (CreateScheduleRequest request, IScheduleService _scheduleService) =>
+{
+    var validationRes = ValidateSchedule(request);
+    if (!validationRes.IsSuccess) return Results.BadRequest(validationRes);
+
+    var response = await _scheduleService.SaveScheduleAsync(request);
+    return ResponseHelper.ConvertResponseType(response);
+});
+
+schedules.MapPut("/{id}", async (string id, CreateScheduleRequest request, IScheduleService _scheduleService) =>
+{
+    var validationRes = ValidateSchedule(request);
+    if (!validationRes.IsSuccess) return Results.BadRequest(validationRes);
+
+    var response = await _scheduleService.UpdateScheduleAsync(request, id);
+    return ResponseHelper.ConvertResponseType(response);
+});
+
+schedules.MapPatch("/{id}", async (string id, UpdatePatchScheduleRequest request, IScheduleService _scheduleService) =>
+{
+    var response = await _scheduleService.UpdatePatchScheduleAsync(request, id);
+    return ResponseHelper.ConvertResponseType(response);
+});
+
+schedules.MapDelete("/{id}", async (string id, IScheduleService _scheduleService) =>
+{
+    var response = await _scheduleService.DeleteScheduleAsync(id);
+    return ResponseHelper.ConvertResponseType(response);
+});
+static ResponseBaseModel ValidateSchedule(CreateScheduleRequest request)
+{
+    if (string.IsNullOrWhiteSpace(request.ScheduleName))
+        return new ResponseBaseModel { IsSuccess = false, Message = "Schedule name is required." };
+
+    if (!TimeSpan.TryParseExact(request.StartTime, "hh\\:mm\\:ss", null, out var startTime))
+        return new ResponseBaseModel { IsSuccess = false, Message = "StartTime must be in HH:mm:ss format" };
+
+    if (!TimeSpan.TryParseExact(request.EndTime, "hh\\:mm\\:ss", null, out var endTime))
+        return new ResponseBaseModel { IsSuccess = false, Message = "EndTime must be in HH:mm:ss format" };
+
+    if (endTime <= startTime)
+        return new ResponseBaseModel { IsSuccess = false, Message = "EndTime must be after StartTime" };
+
+    return new ResponseBaseModel { IsSuccess = true };
+}
+#endregion
+
 # region class controller
-var classApi = app.MapGroup("/api/class");
+var classApi = app.MapGroup("/api/class").WithTags("Class Endpoints"); ;
 
 // GET: /api/class/{pageNo}/{pageSize}
 classApi.MapGet("/{pageNo:int}/{pageSize:int}", async (int pageNo, int pageSize, IClassService _classService) =>
@@ -239,7 +241,7 @@ static ResponseBaseModel ValidateClass(CreateClassRequest request)
 # endregion
 
 # region grade controller
-var gradesApi = app.MapGroup("/api/grades");
+var gradesApi = app.MapGroup("/api/grades").WithTags("Grade Endpoints"); ;
 
 // GET: /api/grades/{pageNo}/{pageSize}
 gradesApi.MapGet("/{pageNo:int}/{pageSize:int}", async (int pageNo, int pageSize, IGradeService _gradeService) =>
@@ -304,7 +306,7 @@ static ResponseBaseModel ValidateGrade(CreateGradeRequest request)
 # endregion
 
 # region studentEnroll controller
-var enrollApi = app.MapGroup("/api/students-enroll");
+var enrollApi = app.MapGroup("/api/students-enroll").WithTags("Student Enroll Endpoints"); ;
 
 // GET: /api/students-enroll/{pageNo}/{pageSize}
 enrollApi.MapGet("/{pageNo:int}/{pageSize:int}", async (int pageNo, int pageSize, IStudentsEnrollService _service) =>
@@ -369,7 +371,7 @@ static ResponseBaseModel ValidateEnrollment(CreateStudentsEnrollRequest request)
 # endregion
 
 # region attendance controller
-var attendanceApi = app.MapGroup("/api/attendances");
+var attendanceApi = app.MapGroup("/api/attendances").WithTags("Attendance Endpoints"); ;
 
 // GET: /api/attendances/{pageNo}/{pageSize}
 attendanceApi.MapGet("/{pageNo:int}/{pageSize:int}", async (int pageNo, int pageSize, IAttendanceService _service) =>
@@ -454,7 +456,7 @@ static ResponseBaseModel ValidateAttendance(CreateAttendanceRequest request)
 # endregion
 
 # region leave controller
-var leaveApi = app.MapGroup("/api/leaves");
+var leaveApi = app.MapGroup("/api/leaves").WithTags("Leave Endpoints"); ;
 
 // GET: /api/leaves/{pageNo}/{pageSize}
 leaveApi.MapGet("/{pageNo:int}/{pageSize:int}", async (int pageNo, int pageSize, ILeaveService _service) =>
@@ -517,7 +519,7 @@ static ResponseBaseModel ValidateLeave(CreateLeaveRequest request)
 # endregion
 
 # region report controller
-var reportApi = app.MapGroup("/api/reports");
+var reportApi = app.MapGroup("/api/reports").WithTags("Report Endpoints"); ;
 
 // POST: /api/reports/attendance
 reportApi.MapPost("/attendance", async (AttendanceReportRequest request, IReportService _service) =>

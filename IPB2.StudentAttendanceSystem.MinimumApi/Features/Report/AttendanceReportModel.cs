@@ -1,8 +1,8 @@
-﻿using IPB2.StudentAttendanceSystem.WebApi.Common;
-using IPB2.StudentAttendanceSystem.WebApi.Features.Attendance;
+﻿
+using IPB2.StudentAttendanceSystem.MinimumApi.Common;
 using System.Text.Json.Serialization;
 
-namespace IPB2.StudentAttendanceSystem.WebApi.Features.Report;
+namespace IPB2.StudentAttendanceSystem.MinimumApi.Features.Report;
 
 public class AttendanceReportModel
 {
