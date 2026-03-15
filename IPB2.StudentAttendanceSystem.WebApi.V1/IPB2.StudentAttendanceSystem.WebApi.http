@@ -1,0 +1,6 @@
+@IPB2.StudentAttendanceSystem.WebApi_HostAddress = http://localhost:5227
+
+GET {{IPB2.StudentAttendanceSystem.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

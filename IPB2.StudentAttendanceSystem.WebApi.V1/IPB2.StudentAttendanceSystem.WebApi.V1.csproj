@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Features\StudentsEnroll\Controllers\**" />
+    <Compile Remove="Features\StudentsEnroll\Services\**" />
+    <Compile Remove="Features\Teacher\Controllers\**" />
+    <Compile Remove="Features\Teacher\Services\**" />
+    <Content Remove="Features\StudentsEnroll\Controllers\**" />
+    <Content Remove="Features\StudentsEnroll\Services\**" />
+    <Content Remove="Features\Teacher\Controllers\**" />
+    <Content Remove="Features\Teacher\Services\**" />
+    <EmbeddedResource Remove="Features\StudentsEnroll\Controllers\**" />
+    <EmbeddedResource Remove="Features\StudentsEnroll\Services\**" />
+    <EmbeddedResource Remove="Features\Teacher\Controllers\**" />
+    <EmbeddedResource Remove="Features\Teacher\Services\**" />
+    <None Remove="Features\StudentsEnroll\Controllers\**" />
+    <None Remove="Features\StudentsEnroll\Services\**" />
+    <None Remove="Features\Teacher\Controllers\**" />
+    <None Remove="Features\Teacher\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  
+    <ProjectReference Include="..\IPB2.EFCore.Database\IPB2.EFCore.Database.csproj" />
+  </ItemGroup>
+
+</Project>

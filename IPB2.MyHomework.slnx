@@ -5,6 +5,7 @@
   <Project Path="IPB2.Homework/IPB2.CRUDWithADO.csproj" />
   <Project Path="IPB2.MyanmarMmonths.WebApi/IPB2.MyanmarMonths.WebApi.csproj" Id="08e0eda3-d149-47d0-9f87-9eb06c2d5389" />
   <Project Path="IPB2.MyanmarMonth.FileReader.Console/IPB2.MyanmarMonth.FileReader.Console.csproj" Id="4dc5c8cf-0607-4922-9f23-4296db6da076" />
+  <Project Path="IPB2.StudentAttendanceSystem.WebApi.V1/IPB2.StudentAttendanceSystem.WebApi.V1.csproj" />
   <Project Path="IPB2.StudentAttendanceSystem.WebApi/IPB2.StudentAttendanceSystem.WebApi.csproj" Id="6549b25f-98df-4f96-b4bb-95ed00bb89a7" />
   <Project Path="IPB2.WalletTransfer.Dapper/IPB2.WalletTransfer.Dapper.csproj" Id="1a8eee3f-643d-477e-a1ec-033d046b6ec3" />
   <Project Path="IPB2.WallletTransfer.Window/IPB2.ATMWindowApp.EFCoe.csproj" />
